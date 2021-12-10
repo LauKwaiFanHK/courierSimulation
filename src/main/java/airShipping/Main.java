@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Starting...");
 		IPlatformConfiguration config = PlatformConfigurationHandler.getMinimal();
-		config.setGui(false);
+		config.setGui(true);
 		IFuture<IExternalAccess> platformfuture = Starter.createPlatform(config);
 
 		System.out.println("Calling get()");

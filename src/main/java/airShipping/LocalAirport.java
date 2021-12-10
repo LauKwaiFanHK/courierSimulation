@@ -8,17 +8,20 @@ import jadex.extension.envsupport.math.Vector2Double;
 
 public class LocalAirport {
 	private IVector2 airportCoordinate;
-
 	private String airportName;
+	// warehouse of the airport
+	private Warehouse warehouse;
 
 	List<Warehouse> airport_warehouse = new ArrayList<>();
 
-	public LocalAirport(IVector2 airportCoordinate, String airportName) {
+	// constructor for LocalAirport
+	public LocalAirport(IVector2 airportCoordinate, String airportName, Warehouse warehouse) {
 		this.airportCoordinate = airportCoordinate;
 		this.airportName = airportName;
+		this.warehouse = warehouse;
 	}
 
-	public void createNewWarehouse(String id, double capacity, double fillUpRate) {
+	public void createNewWarehouse(String id, int capacity, int fillUpRate) {
 		Warehouse warehouse = new Warehouse(id, capacity, fillUpRate);
 		airport_warehouse.add(warehouse);
 	}
@@ -49,4 +52,11 @@ public class LocalAirport {
 		this.airportName = airportName;
 	}
 
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
 }

@@ -1,12 +1,6 @@
 package airShipping;
 
 import jadex.extension.envsupport.math.IVector2;
-import jadex.extension.envsupport.math.Vector2Double;
-import java.awt.Point;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Plane {
 
@@ -20,10 +14,10 @@ public class Plane {
 	}
 
 	private PlaneDirection myDirection;
-	private double x0;
-	private double x1;
-	private double y0;
-	private double y1;
+	// plane storage
+	private int capacity;
+	int numOfParcels;
+	private double occupancy;
 
 	public Plane(String id, LocalAirport departAirport, LocalAirport arrivalAirport) {
 		this.id = id;
@@ -31,10 +25,9 @@ public class Plane {
 		this.departAirport = departAirport;
 		this.arrivalAirport = arrivalAirport;
 		this.myDirection = this.getPlaneDirection();
-		this.x0 = departAirport.getAirportXcoordinate();
-		this.x1 = arrivalAirport.getAirportXcoordinate();
-		this.y0 = departAirport.getAirportYcoordinate();
-		this.y1 = arrivalAirport.getAirportYcoordinate();
+		this.capacity = 100;
+		this.numOfParcels = 0;
+		this.occupancy = 0.0;
 	}
 
 	public IVector2 getCurrentPosition() {
@@ -82,7 +75,7 @@ public class Plane {
 
 	private double speedIfStop = 0.0;
 
-	private double speed = 1;
+	private double speed = 0.1;
 
 	public void updatePos(double deltaseconds) {
 //		IVector2 direction = vel.getDirection(vel)
@@ -200,5 +193,51 @@ public class Plane {
 	public double getSpeed() {
 		return speed;
 	};
+
+	// methods for plane storage
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public int getNumOfParcels() {
+		return numOfParcels;
+	}
+
+	// set the current occupancy of the plane
+	public void setOccupancy() {
+		this.occupancy = (double) numOfParcels / capacity;
+	}
+
+	// get the current occupancy of the plane
+	public double getOccupancy() {
+		return occupancy;
+	}
+
+	// load parcels into plane*
+	public void loadParcelsToPlane(int fillUp, int seconds) {
+		this.numOfParcels += (fillUp * seconds);
+		this.setOccupancy();
+		// System.out.println("Parcels in plane: " + this.numOfParcels);
+	}
+
+	// unload parcels from plane*
+	public void unloadParcelsFromPlane() {
+		this.numOfParcels = 0;
+		this.setOccupancy();
+	}
+
+	// show the status of plane and warehouses*
+	public void showStatus() {
+		Warehouse departWarehouse = this.getDepartAirport().getWarehouse();
+		Warehouse arrivalWarehouse = this.getArrivalAirport().getWarehouse();
+		System.out.println("Plane occupancy: " + (this.occupancy * 100) + "%" + "\nDepart warehouse occupancy: "
+				+ (departWarehouse.getOccupancy() * 100) + "%" + "\nArrival warehouse occupancy: "
+				+ (arrivalWarehouse.getOccupancy() * 100) + "%");
+	}
 
 }
