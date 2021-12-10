@@ -14,10 +14,13 @@ public class Plane {
 	}
 
 	private PlaneDirection myDirection;
+	boolean fullyLoaded;
+	double loadDuration;
+	double unloadDuration;
 	// plane storage
-	private int capacity;
-	int numOfParcels;
-	private double occupancy;
+//	private int capacity;
+//	int numOfParcels;
+//	private double occupancy;
 
 	public Plane(String id, LocalAirport departAirport, LocalAirport arrivalAirport) {
 		this.id = id;
@@ -25,9 +28,12 @@ public class Plane {
 		this.departAirport = departAirport;
 		this.arrivalAirport = arrivalAirport;
 		this.myDirection = this.getPlaneDirection();
-		this.capacity = 100;
-		this.numOfParcels = 0;
-		this.occupancy = 0.0;
+		this.loadDuration = 6.0;
+		this.unloadDuration = 4.0;
+		this.fullyLoaded = false;
+//		this.capacity = 100;
+//		this.numOfParcels = 0;
+//		this.occupancy = 0.0;
 	}
 
 	public IVector2 getCurrentPosition() {
@@ -37,6 +43,38 @@ public class Plane {
 	public IVector2 setCurrentPosition(IVector2 currentPosition) {
 		this.currentPosition = currentPosition;
 		return currentPosition;
+	}
+
+	public PlaneDirection getMyDirection() {
+		return myDirection;
+	}
+
+	public void setMyDirection(PlaneDirection myDirection) {
+		this.myDirection = myDirection;
+	}
+
+	public boolean isFullyLoaded() {
+		return fullyLoaded;
+	}
+
+	public void setFullyLoaded(boolean fullyLoaded) {
+		this.fullyLoaded = fullyLoaded;
+	}
+
+	public double getUnloadDuration() {
+		return unloadDuration;
+	}
+
+	public void setUnloadDuration(double unloadDuration) {
+		this.unloadDuration = unloadDuration;
+	}
+
+	public double getLoadingTime() {
+		return loadDuration;
+	}
+
+	public void setLoadingTime(double loadingTime) {
+		this.loadDuration = loadingTime;
 	}
 
 	public double getCurrentPositionX(IVector2 currentPosition) {
@@ -75,7 +113,42 @@ public class Plane {
 
 	private double speedIfStop = 0.0;
 
-	private double speed = 0.1;
+	private double speed = 0.0;
+
+	public void loadParcels() {
+		if (!fullyLoaded) {
+			System.out.println("Plane locates at airport: " + this.getDepartAirport().getAirportName());
+			System.out.println("Plane's current location: " + this.currentPosition);
+			System.out.println("Parcels are now being loaded to the plane...");
+			if (this.speed == 0.0 && !(loadDuration == 0.0)) {
+				System.out.println("Still " + loadDuration + " seconds before departure...\n---");
+				loadDuration = loadDuration - 1;
+			} else {
+				if (loadDuration == 0.0) {
+					System.out.println("Plane is fully loaded. Ready to depart.\n---");
+					this.setFullyLoaded(true);
+				}
+			}
+		}
+	}
+
+	public void unloadParcels() {
+		if (fullyLoaded) {
+			System.out.println("Plane locates at airport: " + this.getArrivalAirport().getAirportName());
+			System.out.println("Plane's current location: " + this.currentPosition);
+			System.out.println("Parcels are now being unloaded from the plane...");
+			if (this.speed == 0.0 && !(unloadDuration == 0.0)) {
+				System.out.println("Still " + unloadDuration + " seconds to finish unloading...\n---");
+				unloadDuration = unloadDuration - 1;
+			} else {
+				if (unloadDuration == 0.0) {
+					System.out.println("All parcels is unloaded at airport: " + this.arrivalAirport.getAirportName()
+							+ ". The plane is ready to fill up parcels again!\n---");
+					this.setFullyLoaded(false);
+				}
+			}
+		}
+	}
 
 	public void updatePos(double deltaseconds) {
 //		IVector2 direction = vel.getDirection(vel)
@@ -97,7 +170,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else {
+			} else if (fullyLoaded) {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -107,7 +180,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else {
+			} else if (fullyLoaded) {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -117,7 +190,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else {
+			} else if (fullyLoaded) {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -127,7 +200,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else {
+			} else if (fullyLoaded) {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -164,6 +237,7 @@ public class Plane {
 	}
 
 	public void movePlane(IVector2 newUnitVector) {
+		this.setSpeed(0.01);
 		System.out.println("Plane's current Position: " + currentPosition);
 		System.out.println("Speed: " + this.getSpeed() + "\n----");
 		IVector2 positionDelta = newUnitVector.multiply(speed);
@@ -196,48 +270,48 @@ public class Plane {
 
 	// methods for plane storage
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public int getNumOfParcels() {
-		return numOfParcels;
-	}
-
-	// set the current occupancy of the plane
-	public void setOccupancy() {
-		this.occupancy = (double) numOfParcels / capacity;
-	}
-
-	// get the current occupancy of the plane
-	public double getOccupancy() {
-		return occupancy;
-	}
-
-	// load parcels into plane*
-	public void loadParcelsToPlane(int fillUp, int seconds) {
-		this.numOfParcels += (fillUp * seconds);
-		this.setOccupancy();
-		// System.out.println("Parcels in plane: " + this.numOfParcels);
-	}
-
-	// unload parcels from plane*
-	public void unloadParcelsFromPlane() {
-		this.numOfParcels = 0;
-		this.setOccupancy();
-	}
-
-	// show the status of plane and warehouses*
-	public void showStatus() {
-		Warehouse departWarehouse = this.getDepartAirport().getWarehouse();
-		Warehouse arrivalWarehouse = this.getArrivalAirport().getWarehouse();
-		System.out.println("Plane occupancy: " + (this.occupancy * 100) + "%" + "\nDepart warehouse occupancy: "
-				+ (departWarehouse.getOccupancy() * 100) + "%" + "\nArrival warehouse occupancy: "
-				+ (arrivalWarehouse.getOccupancy() * 100) + "%");
-	}
+//	public void setCapacity(int capacity) {
+//		this.capacity = capacity;
+//	}
+//
+//	public int getCapacity() {
+//		return capacity;
+//	}
+//
+//	public int getNumOfParcels() {
+//		return numOfParcels;
+//	}
+//
+//	// set the current occupancy of the plane
+//	public void setOccupancy() {
+//		this.occupancy = (double) numOfParcels / capacity;
+//	}
+//
+//	// get the current occupancy of the plane
+//	public double getOccupancy() {
+//		return occupancy;
+//	}
+//
+//	// load parcels into plane*
+//	public void loadParcelsToPlane(int fillUp, int seconds) {
+//		this.numOfParcels += (fillUp * seconds);
+//		this.setOccupancy();
+//		// System.out.println("Parcels in plane: " + this.numOfParcels);
+//	}
+//
+//	// unload parcels from plane*
+//	public void unloadParcelsFromPlane() {
+//		this.numOfParcels = 0;
+//		this.setOccupancy();
+//	}
+//
+//	// show the status of plane and warehouses**
+//	public void showStatus() {
+//		Warehouse departWarehouse = this.getDepartAirport().getWarehouse();
+//		Warehouse arrivalWarehouse = this.getArrivalAirport().getWarehouse();
+//		System.out.println("Plane occupancy: " + (this.occupancy * 100) + "%" + "\nDepart warehouse occupancy: "
+//				+ (departWarehouse.getOccupancy() * 100) + "%" + "\nArrival warehouse occupancy: "
+//				+ (arrivalWarehouse.getOccupancy() * 100) + "%");
+//	}
 
 }

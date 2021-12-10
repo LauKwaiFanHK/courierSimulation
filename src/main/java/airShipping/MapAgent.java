@@ -42,8 +42,9 @@ public class MapAgent {
 	private JFrame frame;
 
 	private Plane plane;
-	private LocalAirport departAirport;
-	private LocalAirport arrivalAirport;
+	private LocalAirport airportA;
+	private LocalAirport airportB;
+	private LocalAirport airportC;
 
 	List<Plane> planeList = new ArrayList<>();
 	HashMap<String, LocalAirport> airportList = new HashMap<String, LocalAirport>();
@@ -75,15 +76,18 @@ public class MapAgent {
 
 	@OnStart
 	public IFuture<Void> agentRun() {
-		Warehouse warehouseA = new Warehouse("Warehouse A", 200, 20);
-		Warehouse warehouseB = new Warehouse("Warehouse B", 200, 10);
-		departAirport = new LocalAirport((new Vector2Double(1.7, 7.9)), "A", warehouseA);
-		arrivalAirport = new LocalAirport((new Vector2Double(13.8, 2.5)), "B", warehouseB);
-		plane = new Plane("01", departAirport, arrivalAirport);
+		Warehouse warehouseA = new Warehouse("Warehouse A", 20, 1);
+		Warehouse warehouseB = new Warehouse("Warehouse B", 20, 1);
+		Warehouse warehouseC = new Warehouse("Warehouse C", 20, 1);
+		airportA = new LocalAirport((new Vector2Double(1.7, 7.9)), "A", warehouseA);
+		airportB = new LocalAirport((new Vector2Double(13.8, 2.5)), "B", warehouseB);
+		airportC = new LocalAirport((new Vector2Double(5.2, 11.7)), "C", warehouseC);
+		plane = new Plane("Plane-01", airportA, airportB);
 
 		planeList.add(plane);
-		airportList.put("airport_A", departAirport);
-		airportList.put("airport_B", arrivalAirport);
+		airportList.put("airport_A", airportA);
+		airportList.put("airport_B", airportB);
+		airportList.put("airport_C", airportC);
 
 		System.out.println("Agent is running, a plane is created. \n");
 		System.out.println("Loading parcels into warehouse... \n");
@@ -103,7 +107,7 @@ public class MapAgent {
 					g.setColor(Color.pink);
 					g.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 
-					// departAirport
+					// departAirport (Airport A)
 					double w1 = 75;
 					double h1 = 50;
 					double x1 = 1.7 * 30;
@@ -117,7 +121,7 @@ public class MapAgent {
 					Font f1 = new Font("Arial", Font.PLAIN, 12);
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String s = "Depart Airport";
+					String s = "Airport A";
 					g.drawString(s, (int) x1, (int) (y1 - 10));
 					// capacity text
 					g.setColor(Color.black);
@@ -125,12 +129,12 @@ public class MapAgent {
 					String cap1 = "Capacity: " + (plane.getDepartAirport().getWarehouse().getOccupancy() * 100) + "%";
 					g.drawString(cap1, (int) x1, (int) (y1 + 70));
 
-					// arrivalAirport
+					// arrivalAirport (Airport B)
 					double w2 = 75;
 					double h2 = 50;
-					double x2 = arrivalAirport.getAirportCoordinate().getXAsDouble() * 30;
+					double x2 = airportB.getAirportCoordinate().getXAsDouble() * 30;
 					x2 = x2 - (w2 / 2);
-					double y2 = arrivalAirport.getAirportCoordinate().getYAsDouble() * 30;
+					double y2 = airportB.getAirportCoordinate().getYAsDouble() * 30;
 					y2 = y2 - (h2 / 2);
 					Rectangle2D planeRecc = new Rectangle2D.Double(x2, y2, w2, h2);
 					g.setColor(Color.yellow);
@@ -138,13 +142,34 @@ public class MapAgent {
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String s2 = "Arrival Airport";
+					String s2 = "Airport B";
 					g.drawString(s2, (int) x2, (int) (y2 - 10));
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String cap2 = "Capacity: " + (plane.getArrivalAirport().getWarehouse().getOccupancy() * 100) + "%";
 					g.drawString(cap2, (int) x2, (int) (y2 + 70));
+
+					// arrivalAirport (Airport C)
+					double w3 = 75;
+					double h3 = 50;
+					double x3 = airportC.getAirportCoordinate().getXAsDouble() * 30;
+					x3 = x3 - (w3 / 2);
+					double y3 = airportC.getAirportCoordinate().getYAsDouble() * 30;
+					y2 = y3 - (h2 / 2);
+					Rectangle2D airportCRecc = new Rectangle2D.Double(x3, y3, w3, h3);
+					g.setColor(Color.blue);
+					g.fill(airportCRecc);
+					// Arrival airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s3 = "Airport C";
+					g.drawString(s3, (int) x3, (int) (y3 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap3 = "Capacity: " + (plane.getArrivalAirport().getWarehouse().getOccupancy() * 100) + "%";
+					g.drawString(cap3, (int) x3, (int) (y3 + 70));
 
 					// Plane
 					double w = 15;
@@ -161,7 +186,7 @@ public class MapAgent {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String capPlane = "Capacity: " + (plane.getOccupancy() * 100) + "%";
+					String capPlane = "Plane's is fully loaded: " + (plane.isFullyLoaded());
 					g.drawString(capPlane, (int) x, (int) (y + 70));
 
 					// uncomment 2 next line
@@ -192,47 +217,59 @@ public class MapAgent {
 //				IVector2 newPos = plane.getNewPosition(startPos);
 					Instant instant = Instant.now();
 					// warehouses
-					Warehouse departWarehouse = plane.getDepartAirport().getWarehouse();
-					Warehouse arrivalWarehouse = plane.getArrivalAirport().getWarehouse();
-					int planeFillUp = departWarehouse.fillUpRate;
+//					Warehouse departWarehouse = plane.getDepartAirport().getWarehouse();
+//					Warehouse arrivalWarehouse = plane.getArrivalAirport().getWarehouse();
+//					int planeFillUp = departWarehouse.fillUpRate;
+//
+//					// System.out.println("Current UTC time: " + instant);
+//					if (departWarehouse.getOccupancy() != 1.0) {
+//						departWarehouse.loadParcels(1);
+//						System.out.println("Parcels in warehouse: " + departWarehouse.getNumberOfParcels()
+//								+ ". Occupancy: " + (departWarehouse.getOccupancy() * 100) + "%");
+//						if (departWarehouse.getOccupancy() == 1.0) {
+//							System.out.println("Warehouse capacity is reached. Loading parcels into the plane.\n");
+//						}
+//						/*
+//						 * while (departWarehouse.getOccupancy() != 1.0) {
+//						 * 
+//						 * }
+//						 */
+//					} else if (departWarehouse.getOccupancy() == 1.0) { // no. of parcels in warehouse reduces with time
+//						while (plane.getOccupancy() != 1.0) {
+//							plane.loadParcelsToPlane(planeFillUp, 1);
+//							System.out.println("Parcels in plane: " + +plane.getNumOfParcels() + ". Occupancy: "
+//									+ (plane.getOccupancy() * 100) + "%");
+//							if (plane.getOccupancy() == 1.0) {
+//								System.out.println("Plane capacity is reached. Plane is ready to take off.\n");
+//							}
+//						}
+//					}
 
-					// System.out.println("Current UTC time: " + instant);
-					if (departWarehouse.getOccupancy() != 1.0) {
-						departWarehouse.loadParcels(1);
-						System.out.println("Parcels in warehouse: " + departWarehouse.getNumberOfParcels()
-								+ ". Occupancy: " + (departWarehouse.getOccupancy() * 100) + "%");
-						if (departWarehouse.getOccupancy() == 1.0) {
-							System.out.println("Warehouse capacity is reached. Loading parcels into the plane.\n");
-						}
-						/*
-						 * while (departWarehouse.getOccupancy() != 1.0) {
-						 * 
-						 * }
-						 */
-					} else if (departWarehouse.getOccupancy() == 1.0) {
-						while (plane.getOccupancy() != 1.0) {
-							plane.loadParcelsToPlane(planeFillUp, 1);
-							System.out.println("Parcels in plane: " + +plane.getNumOfParcels() + ". Occupancy: "
-									+ (plane.getOccupancy() * 100) + "%");
-							if (plane.getOccupancy() == 1.0) {
-								System.out.println("Plane capacity is reached. Plane is ready to take off.\n");
-							}
-						}
-					}
-
-					if (plane.getOccupancy() == 1.0) {
-						// departWarehouse.unloadParcels(1);
-						boolean arrived = plane.getCurrentPosition().equals(arrivalAirport.getAirportCoordinate());
-						if (!(plane == null) && !arrived) {
-							System.out.println("Current UTC time: " + instant);
-							plane.showStatus();
-							if (!arrived) {
-								plane.updatePos(1);
-							}
+//					if (plane.getOccupancy() == 1.0) {
+					// departWarehouse.unloadParcels(1);
+					boolean arrived = plane.getCurrentPosition()
+							.equals(plane.getArrivalAirport().getAirportCoordinate());
+					if (!(plane == null)) {
+						System.out.println("Current UTC time: " + instant);
+//							plane.showStatus();
+						if (!arrived) {
+							plane.loadParcels();
+							plane.updatePos(1);
 						} else {
-							return null;
+							plane.unloadParcels();
+							if (!plane.fullyLoaded) {
+								plane.setDepartAirport(airportB);
+								plane.setArrivalAirport(airportC);
+								plane.setMyDirection(plane.getPlaneDirection());
+								plane.setLoadingTime(7);
+								System.out
+										.println("Next Destination is: " + plane.getArrivalAirport().getAirportName());
+							}
 						}
+					} else {
+						return null;
 					}
+//					}
 
 					ia.scheduleStep(simulationstep);
 					return IFuture.DONE;
