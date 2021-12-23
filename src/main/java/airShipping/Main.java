@@ -31,6 +31,10 @@ public class Main {
 		IExternalAccess envagent = platform.createComponent(ci).get();
 		System.out.println("Got MapAgent using get() " + envagent);
 
+		ci = new CreationInfo();
+		ci.setFilenameClass(PlaneAgent.class);
+		platform.createComponent(ci).get();
+
 		platform.scheduleStep(new IComponentStep<Void>() {
 
 			@Override

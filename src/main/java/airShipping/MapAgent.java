@@ -250,7 +250,7 @@ public class MapAgent implements IMapService {
 					boolean arrived = plane.getCurrentPosition()
 							.equals(plane.getArrivalAirport().getAirportCoordinate());
 					if (!(plane == null)) {
-						System.out.println("Current UTC time: " + instant);
+//						System.out.println("Current UTC time: " + instant);
 //							plane.showStatus();
 						if (!arrived) {
 							plane.loadParcels();
@@ -258,12 +258,12 @@ public class MapAgent implements IMapService {
 						} else {
 							plane.unloadParcels();
 							if (!plane.fullyLoaded) {
-								plane.setDepartAirport(airportB);
-								plane.setArrivalAirport(airportC);
-								plane.setMyDirection(plane.getPlaneDirection());
-								plane.setLoadingTime(7);
-								System.out
-										.println("Next Destination is: " + plane.getArrivalAirport().getAirportName());
+//								plane.setDepartAirport(airportB);
+//								plane.setArrivalAirport(airportC);
+//								plane.setMyDirection(plane.getPlaneDirection());
+//								plane.setLoadingTime(7);
+//								System.out
+//										.println("Next Destination is: " + plane.getArrivalAirport().getAirportName());
 							}
 						}
 					} else {
@@ -282,5 +282,12 @@ public class MapAgent implements IMapService {
 
 		return new Future<Void>();
 	}
+
+	public IFuture<Void> createPlane() {
+		synchronized (this) {
+
+		}
+		return IFuture.DONE;
+	};
 
 }
