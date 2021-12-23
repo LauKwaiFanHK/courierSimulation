@@ -29,6 +29,7 @@ import jadex.bridge.service.annotation.Service;
 import jadex.commons.Boolean3;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
+import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.micro.annotation.Agent;
 
@@ -247,12 +248,12 @@ public class MapAgent implements IMapService {
 
 //					if (plane.getOccupancy() == 1.0) {
 					// departWarehouse.unloadParcels(1);
-					boolean arrived = plane.getCurrentPosition()
-							.equals(plane.getArrivalAirport().getAirportCoordinate());
+//					boolean arrived = plane.getCurrentPosition()
+//							.equals(plane.getArrivalAirport().getAirportCoordinate());
 					if (!(plane == null)) {
 //						System.out.println("Current UTC time: " + instant);
 //							plane.showStatus();
-						if (!arrived) {
+						if (!plane.hasArrived()) {
 							plane.loadParcels();
 							plane.updatePos(1);
 						} else {
@@ -283,11 +284,25 @@ public class MapAgent implements IMapService {
 		return new Future<Void>();
 	}
 
-	public IFuture<Void> createPlane() {
-		synchronized (this) {
+	// use hashmap or arraylist if more planes will be created in later phase
+//	public IFuture<Void> createPlane() {
+//
+//		synchronized (this) {
+//			plane = new Plane("Plane-01", airportA, airportB);
+//		}
+//
+//		return IFuture.DONE;
+//	};
 
+	public IFuture<Void> setPlaneTarget(LocalAirport nextAirport) {
+		Future<Void> ret = new Future<>();
+		synchronized (this) {
+//			Plane plane = cars.get(name); // if planeList exists, add arg String planeIdentifier
+			plane.setTarget(nextAirport.getAirportCoordinate());
+			plane.setTargetArrived(ret);
 		}
-		return IFuture.DONE;
-	};
+
+		return ret;
+	}
 
 }

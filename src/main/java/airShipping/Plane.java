@@ -1,5 +1,6 @@
 package airShipping;
 
+import jadex.commons.future.Future;
 import jadex.extension.envsupport.math.IVector2;
 
 public class Plane {
@@ -14,6 +15,9 @@ public class Plane {
 	}
 
 	private PlaneDirection myDirection;
+	private IVector2 target;
+	private Future<Void> targetArrived;
+
 	boolean fullyLoaded;
 	double loadDuration;
 	double unloadDuration;
@@ -27,6 +31,7 @@ public class Plane {
 		this.currentPosition = departAirport.getAirportCoordinate();
 		this.departAirport = departAirport;
 		this.arrivalAirport = arrivalAirport;
+		this.target = arrivalAirport.getAirportCoordinate();
 		this.myDirection = this.getPlaneDirection();
 		this.loadDuration = 6.0;
 		this.unloadDuration = 4.0;
@@ -51,6 +56,22 @@ public class Plane {
 
 	public void setMyDirection(PlaneDirection myDirection) {
 		this.myDirection = myDirection;
+	}
+
+	public IVector2 getTarget() {
+		return target;
+	}
+
+	public void setTarget(IVector2 target) {
+		this.target = target;
+	}
+
+	public Future<Void> getTargetArrived() {
+		return targetArrived;
+	}
+
+	public void setTargetArrived(Future<Void> targetArrived) {
+		this.targetArrived = targetArrived;
 	}
 
 	public boolean isFullyLoaded() {
@@ -267,6 +288,10 @@ public class Plane {
 	public double getSpeed() {
 		return speed;
 	};
+
+	public boolean hasArrived() {
+		return currentPosition.equals(this.getArrivalAirport().getAirportCoordinate());
+	}
 
 	// methods for plane storage
 
