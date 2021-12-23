@@ -313,5 +313,4 @@ public class Plane {
 //				+ (departWarehouse.getOccupancy() * 100) + "%" + "\nArrival warehouse occupancy: "
 //				+ (arrivalWarehouse.getOccupancy() * 100) + "%");
 //	}
-
 }

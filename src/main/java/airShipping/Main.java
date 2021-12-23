@@ -36,6 +36,17 @@ public class Main {
 			@Override
 			public IFuture<Void> execute(IInternalAccess ia) {
 				System.out.println("Platform step is starting...");
+				ServiceQuery<IMapService> query = new ServiceQuery<IMapService>(IMapService.class);
+				query.setScope(ServiceScope.PLATFORM);
+				IMapService is = null;
+				System.out.println("Query Map Service: " + query);
+				try {
+					is = ia.getLocalService(query);
+					System.out.println("Map Service founded: " + is);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.out.println("Map service search result: " + is);
 				return IFuture.DONE;
 			}
 		});

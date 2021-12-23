@@ -34,7 +34,7 @@ import jadex.micro.annotation.Agent;
 
 @Agent(autoprovide = Boolean3.TRUE)
 @Service
-public class MapAgent {
+public class MapAgent implements IMapService {
 
 	@Agent
 	private IInternalAccess agent;
