@@ -257,8 +257,11 @@ public class MapAgent implements IMapService {
 							plane.loadParcels();
 							plane.updatePos(1);
 						} else {
-							plane.unloadParcels();
-							if (!plane.fullyLoaded) {
+//							plane.unloadParcels();
+							if (!plane.fullyLoaded && (plane.getTargetArrived() != null)
+									&& (!plane.getTargetArrived().isDone())) {
+								plane.getTargetArrived().setResult(null);
+								plane.setTargetArrived(null);
 //								plane.setDepartAirport(airportB);
 //								plane.setArrivalAirport(airportC);
 //								plane.setMyDirection(plane.getPlaneDirection());
@@ -285,14 +288,14 @@ public class MapAgent implements IMapService {
 	}
 
 	// use hashmap or arraylist if more planes will be created in later phase
-//	public IFuture<Void> createPlane() {
-//
-//		synchronized (this) {
-//			plane = new Plane("Plane-01", airportA, airportB);
-//		}
-//
-//		return IFuture.DONE;
-//	};
+	public IFuture<Void> createPlane() {
+
+		synchronized (this) {
+			plane = new Plane("Plane-01", airportA, airportB);
+		}
+
+		return IFuture.DONE;
+	};
 
 	public IFuture<Void> setPlaneTarget(LocalAirport nextAirport) {
 		Future<Void> ret = new Future<>();
