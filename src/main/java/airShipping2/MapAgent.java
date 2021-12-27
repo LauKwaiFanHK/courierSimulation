@@ -32,6 +32,7 @@ import jadex.commons.future.IFuture;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentArgument;
 
 @Agent(autoprovide = Boolean3.TRUE)
 @Service
@@ -46,9 +47,7 @@ public class MapAgent implements IMapService {
 
 	private IComponentStep<Void> simulationstep;
 
-	private final IVector2 airportA = new Vector2Double(1.7, 7.9);
-	private final IVector2 airportB = new Vector2Double(13.8, 2.5);
-	private final IVector2 airportC = new Vector2Double(8.2, 11.7);
+	private Airports airports = new Airports();
 
 	@OnInit
 	public IFuture<Void> agentInit() {
@@ -74,6 +73,10 @@ public class MapAgent implements IMapService {
 	public IFuture<Void> agentRun() {
 
 		System.out.println("Map Agent is running.");
+
+		IVector2 airportA = airports.getAirportA();
+		IVector2 airportB = airports.getAirportB();
+		IVector2 airportC = airports.getAirportC();
 
 		Timer swingtimer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -210,7 +213,7 @@ public class MapAgent implements IMapService {
 
 		synchronized (this) {
 			plane = new Plane(id);
-			System.out.println("A plane is created.");
+			System.out.println("A plane is created: " + id);
 		}
 
 		return IFuture.DONE;
@@ -219,11 +222,11 @@ public class MapAgent implements IMapService {
 	public IFuture<Void> setPlaneTarget(/* String id, */ IVector2 target) {
 		Future<Void> ret = new Future<>();
 		synchronized (this) {
-//			Car car = cars.get(name);
+//			Plane plane = cars.get(name);
 			plane.setTarget(target);
 			plane.setTargetArrived(ret);
 		}
-
 		return ret;
 	}
+
 }

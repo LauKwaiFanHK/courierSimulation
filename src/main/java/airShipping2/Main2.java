@@ -10,6 +10,7 @@ import jadex.bridge.service.ServiceScope;
 import jadex.bridge.service.search.ServiceQuery;
 import jadex.bridge.service.types.cms.CreationInfo;
 import jadex.commons.future.IFuture;
+import jadex.extension.envsupport.math.IVector2;
 import jadex.micro.annotation.Agent;
 
 @Agent
@@ -24,6 +25,7 @@ public class Main2 {
 		System.out.println("Calling get()");
 		IExternalAccess platform = platformfuture.get();
 		System.out.println("Got platform using get() " + platform);
+
 		CreationInfo ci = new CreationInfo();
 		ci.setFilenameClass(MapAgent.class);
 		IExternalAccess envagent = platform.createComponent(ci).get();
@@ -49,6 +51,7 @@ public class Main2 {
 					e.printStackTrace();
 				}
 				System.out.println("Map service search result: " + is);
+
 				return IFuture.DONE;
 			}
 		});
