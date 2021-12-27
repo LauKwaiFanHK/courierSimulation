@@ -3,6 +3,7 @@ package airShipping2;
 import jadex.bridge.IInternalAccess;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
+import jadex.commons.future.IResultListener;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.bridge.service.ServiceScope;
@@ -40,12 +41,20 @@ public class PlaneAgent {
 
 	@OnStart
 	public IFuture<Void> agentStart() {
+		IResultListener<Void> rl = new IResultListener<Void>() {
+			public void resultAvailable(Void done) {
 
-		IFuture<Void> arrived = mapService.setPlaneTarget(airportD);
+				System.out.println("Plane has arrived!");
+				IFuture<Void> arrived = mapService.setPlaneTarget(airportA);
+				arrived.addResultListener(this);
+			}
 
-		arrived.then((done) -> {
-			System.out.println("Plane has arrived!");
-		});
+			public void exceptionOccurred(Exception e) {
+			}
+		};
+
+		IFuture<Void> arrived = mapService.setPlaneTarget(airportC);
+		arrived.addResultListener(rl);
 
 		return new Future<Void>();
 	}
