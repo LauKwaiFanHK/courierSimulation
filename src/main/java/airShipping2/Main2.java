@@ -17,6 +17,7 @@ import jadex.micro.annotation.Agent;
 public class Main2 {
 
 	public static void main(String[] args) {
+
 		System.out.println("Starting...");
 		IPlatformConfiguration config = PlatformConfigurationHandler.getMinimal();
 		config.setGui(false);
@@ -33,6 +34,16 @@ public class Main2 {
 
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
+		ci.addArgument("planeID", "XYZ");
+		platform.createComponent(ci).get();
+
+		// create second plane, start from here!
+		// move arguments in createPlane() to main
+		// then add a list in MapAgent to store the 2 planes.
+		// then change createPlane() in MapAgent to put planes in list
+		ci = new CreationInfo();
+		ci.setFilenameClass(PlaneAgent.class);
+		ci.addArgument("planeID", "GHI");
 		platform.createComponent(ci).get();
 
 		platform.scheduleStep(new IComponentStep<Void>() {
@@ -51,6 +62,20 @@ public class Main2 {
 					e.printStackTrace();
 				}
 				System.out.println("Map service search result: " + is);
+
+				ServiceQuery<IPlaneService> query2 = new ServiceQuery<IPlaneService>(IPlaneService.class);
+				query2.setScope(ServiceScope.PLATFORM);
+				IPlaneService is2 = null;
+				System.out.println("Query Plane Service: " + query2);
+
+				try {
+					is2 = ia.getLocalService(query2);
+					System.out.println("Plane Service founded: " + is2);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				System.out.println("Plane service search result: " + is2);
 
 				return IFuture.DONE;
 			}

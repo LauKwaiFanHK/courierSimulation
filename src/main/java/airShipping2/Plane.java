@@ -6,8 +6,8 @@ import jadex.extension.envsupport.math.Vector2Double;
 
 public class Plane {
 
-	private final String id;
-	private IVector2 currentPosition = new Vector2Double(13.8, 2.5);
+	private String id;
+	private IVector2 currentPosition = new Vector2Double(0.0, 0.0);
 	private IVector2 target = new Vector2Double(0.0, 0.0);
 	private double speed;
 	private boolean fullyLoaded;
@@ -19,9 +19,9 @@ public class Plane {
 	private PlaneDirection myDirection;
 	private Future<Void> targetArrived;
 
-	public Plane(String id) {
+	public Plane(/* String id, */ IVector2 startPosition) {
 		this.id = id;
-//		this.currentPosition = new Vector2Double(1.7, 7.9);
+		this.currentPosition = startPosition;
 		this.speed = 0.0;
 		this.myDirection = PlaneDirection.NONE;
 		this.fullyLoaded = true;

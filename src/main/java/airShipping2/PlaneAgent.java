@@ -11,11 +11,15 @@ import jadex.extension.envsupport.math.Vector2Double;
 import jadex.bridge.service.ServiceScope;
 import jadex.bridge.service.annotation.OnInit;
 import jadex.bridge.service.annotation.OnStart;
+import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.ServiceQuery;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentArgument;
+import jadex.commons.Boolean3;
 
-@Agent
-public class PlaneAgent {
+@Agent(autoprovide = Boolean3.TRUE)
+@Service
+public class PlaneAgent implements IPlaneService {
 	@Agent
 	private IInternalAccess agent;
 
@@ -24,6 +28,9 @@ public class PlaneAgent {
 	private Airports airports = new Airports();
 
 	private ArrayList<IVector2> route = new ArrayList<>();
+
+	@AgentArgument
+	private String planeID = "unknown";
 
 	@OnInit
 	public IFuture<Void> agentInit() {
@@ -36,7 +43,7 @@ public class PlaneAgent {
 
 		mapService = agent.getLocalService(query);
 
-		IFuture<Void> done = mapService.createPlane("Plane-01");
+		IFuture<Void> done = mapService.createPlane(airports.getAirportB());
 
 		System.out.println("Plane Agent found: " + mapService);
 
@@ -65,4 +72,9 @@ public class PlaneAgent {
 
 		return new Future<Void>();
 	}
+
+	public IFuture<Void> setPlaneID(String planeID) {
+		this.planeID = planeID;
+		return IFuture.DONE;
+	};
 }
