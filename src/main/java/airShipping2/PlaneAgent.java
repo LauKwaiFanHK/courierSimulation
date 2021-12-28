@@ -29,9 +29,6 @@ public class PlaneAgent implements IPlaneService {
 
 	private ArrayList<IVector2> route = new ArrayList<>();
 
-	@AgentArgument
-	private String planeID = "unknown";
-
 	@OnInit
 	public IFuture<Void> agentInit() {
 		route.add(airports.getAirportC());
@@ -43,7 +40,7 @@ public class PlaneAgent implements IPlaneService {
 
 		mapService = agent.getLocalService(query);
 
-		IFuture<Void> done = mapService.createPlane(airports.getAirportB());
+		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportD());
 
 		System.out.println("Plane Agent found: " + mapService);
 
@@ -74,7 +71,7 @@ public class PlaneAgent implements IPlaneService {
 	}
 
 	public IFuture<Void> setPlaneID(String planeID) {
-		this.planeID = planeID;
+//		this.planeID = planeID;
 		return IFuture.DONE;
 	};
 }

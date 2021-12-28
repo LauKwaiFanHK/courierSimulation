@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -44,6 +45,8 @@ public class MapAgent implements IMapService {
 	private JFrame frame;
 
 	private Plane plane;
+	private Plane plane2;
+	private Map<String, Plane> planeList = new HashMap<>();
 
 	private IComponentStep<Void> simulationstep;
 
@@ -159,23 +162,25 @@ public class MapAgent implements IMapService {
 					g.drawString(cap3, (int) x3, (int) (y3 + 70));
 
 					// Plane
-					if (plane != null) {
-						double w = 15;
-						double h = 15;
-						double x = plane.getCurrentPosition().getXAsDouble() * 30;
-						x = x - (w / 2);
-						double y = plane.getCurrentPosition().getYAsDouble() * 30;
-						y = y - (h / 2);
-						// double x = 13.8 -(w/2);
-						// double y = 2.5 - (h/2);
-						Ellipse2D planeRec = new Ellipse2D.Double(x, y, w, h);
-						g.setColor(Color.red);
-						g.fill(planeRec);
-						// capacity text
-						g.setColor(Color.black);
-						g.setFont(f1);
-						String capPlane = "Plane's is fully loaded: " + (plane.isFullyLoaded());
-						g.drawString(capPlane, (int) x, (int) (y + 70));
+					if (plane != null && plane2 != null) {
+						for (Plane plane : planeList.values()) {
+							double w = 15;
+							double h = 15;
+							double x = plane.getCurrentPosition().getXAsDouble() * 30;
+							x = x - (w / 2);
+							double y = plane.getCurrentPosition().getYAsDouble() * 30;
+							y = y - (h / 2);
+							// double x = 13.8 -(w/2);
+							// double y = 2.5 - (h/2);
+							Ellipse2D planeRec = new Ellipse2D.Double(x, y, w, h);
+							g.setColor(Color.red);
+							g.fill(planeRec);
+							// capacity text
+							g.setColor(Color.black);
+							g.setFont(f1);
+							String capPlane = "Plane's is fully loaded: " + (plane.isFullyLoaded());
+							g.drawString(capPlane, (int) x, (int) (y + 70));
+						}
 					}
 					// uncomment 2 next line
 					Graphics2D gScreen = (Graphics2D) pane.getGraphics();
@@ -189,12 +194,14 @@ public class MapAgent implements IMapService {
 			public IFuture<Void> execute(IInternalAccess ia) {
 				synchronized (MapAgent.this) {
 					if (plane != null) {
-						if (!plane.hasArrived()) {
-							plane.updatePos(1);
-						} else {
-							if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
-								plane.getTargetArrived().setResult(null);
-								plane.setTargetArrived(null);
+						for (Plane plane : planeList.values()) {
+							if (!plane.hasArrived()) {
+								plane.updatePos(1);
+							} else {
+								if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
+									plane.getTargetArrived().setResult(null);
+									plane.setTargetArrived(null);
+								}
 							}
 						}
 					}
@@ -209,20 +216,25 @@ public class MapAgent implements IMapService {
 
 	}
 
-	public IFuture<Void> createPlane(/* String id, */ IVector2 startPosition) {
+	public IFuture<Void> createPlane(String id, IVector2 startPosition, String id2, IVector2 startPosition2) {
 
 		synchronized (this) {
-			plane = new Plane(/* id, */ startPosition);
-			System.out.println("A plane is created: "/* + id */);
+			plane = new Plane(id, startPosition);
+			System.out.println("A plane is created: " + id);
+
+			plane2 = new Plane(id2, startPosition2);
+			System.out.println("A second plane is created: " + id2);
+
+			planeList.put(id, plane);
+			planeList.put(id2, plane2);
 		}
 
 		return IFuture.DONE;
 	};
 
-	public IFuture<Void> setPlaneTarget(/* String id, */ IVector2 target) {
+	public IFuture<Void> setPlaneTarget(IVector2 target) {
 		Future<Void> ret = new Future<>();
 		synchronized (this) {
-//			Plane plane = cars.get(name);
 			plane.setTarget(target);
 			plane.setTargetArrived(ret);
 		}

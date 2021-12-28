@@ -34,16 +34,6 @@ public class Main2 {
 
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "XYZ");
-		platform.createComponent(ci).get();
-
-		// create second plane, start from here!
-		// move arguments in createPlane() to main
-		// then add a list in MapAgent to store the 2 planes.
-		// then change createPlane() in MapAgent to put planes in list
-		ci = new CreationInfo();
-		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "GHI");
 		platform.createComponent(ci).get();
 
 		platform.scheduleStep(new IComponentStep<Void>() {
