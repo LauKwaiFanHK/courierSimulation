@@ -27,26 +27,35 @@ public class PlaneAgent implements IPlaneService {
 
 	private Airports airports = new Airports();
 
-	private ArrayList<IVector2> route = new ArrayList<>();
+	private ArrayList<IVector2> normalRoute = new ArrayList<>();
+
+	private ArrayList<IVector2> expressRoute = new ArrayList<>();
 
 	@OnInit
 	public IFuture<Void> agentInit() {
-		route.add(airports.getAirportC());
-		route.add(airports.getAirportA());
-		route.add(airports.getAirportB());
+		// route B-C-D-A-B
+		normalRoute.add(airports.getAirportC());
+		normalRoute.add(airports.getAirportD());
+		normalRoute.add(airports.getAirportA());
+		normalRoute.add(airports.getAirportB());
+
+		// route B-A-B
+		expressRoute.add(airports.getAirportA());
+		expressRoute.add(airports.getAirportB());
 
 		ServiceQuery<IMapService> query = new ServiceQuery<IMapService>(IMapService.class);
 		query.setScope(ServiceScope.PLATFORM);
 
 		mapService = agent.getLocalService(query);
 
-		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportD());
+		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportB());
 
 		System.out.println("Plane Agent found: " + mapService);
 
 		return done;
 	}
 
+	// Good news, only one @OnStart method allowed in a package :)
 	@OnStart
 	public IFuture<Void> agentStart() {
 
@@ -54,18 +63,35 @@ public class PlaneAgent implements IPlaneService {
 			int i = 0;
 
 			public void resultAvailable(Void done) {
-				i = (i + 1) % route.size();
-				IFuture<Void> arrived = mapService.setPlaneTarget(route.get(i));
+				i = (i + 1) % normalRoute.size();
+				IFuture<Void> arrived = mapService.setPlaneTarget("ABC", normalRoute.get(i));
 				arrived.addResultListener(this);
-				System.out.println("Plane has arrived at " + route.get(i - 1));
+				System.out.println("Plane has arrived at " + normalRoute.get(i - 1));
 			}
 
 			public void exceptionOccurred(Exception e) {
 			}
 		};
 
-		IFuture<Void> arrived = mapService.setPlaneTarget(route.get(0));
+		IResultListener<Void> rl2 = new IResultListener<Void>() {
+			int i = 0;
+
+			public void resultAvailable(Void done) {
+				i = (i + 1) % expressRoute.size();
+				IFuture<Void> arrived = mapService.setPlaneTarget("XYZ", expressRoute.get(i));
+				arrived.addResultListener(this);
+				System.out.println("Plane has arrived at " + expressRoute.get(i - 1));
+			}
+
+			public void exceptionOccurred(Exception e) {
+			}
+		};
+
+		IFuture<Void> arrived = mapService.setPlaneTarget("ABC", normalRoute.get(0));
 		arrived.addResultListener(rl);
+
+		IFuture<Void> arrived2 = mapService.setPlaneTarget("XYZ", expressRoute.get(0));
+		arrived2.addResultListener(rl2);
 
 		return new Future<Void>();
 	}

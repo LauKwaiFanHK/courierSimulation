@@ -8,5 +8,5 @@ import jadex.extension.envsupport.math.IVector2;
 public interface IMapService {
 	public IFuture<Void> createPlane(String id, IVector2 startPosition, String id2, IVector2 startPosition2);
 
-	public IFuture<Void> setPlaneTarget(IVector2 target);
+	public IFuture<Void> setPlaneTarget(String id, IVector2 target);
 }

@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import com.jhlabs.vecmath.Color4f;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -80,6 +82,7 @@ public class MapAgent implements IMapService {
 		IVector2 airportA = airports.getAirportA();
 		IVector2 airportB = airports.getAirportB();
 		IVector2 airportC = airports.getAirportC();
+		IVector2 airportD = airports.getAirportD();
 
 		Timer swingtimer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -146,7 +149,7 @@ public class MapAgent implements IMapService {
 					double x3 = airportC.getXAsDouble() * 30;
 					x3 = x3 - (w3 / 2);
 					double y3 = airportC.getYAsDouble() * 30;
-					y2 = y3 - (h2 / 2);
+					y3 = y3 - (h2 / 2);
 					Rectangle2D airportCRecc = new Rectangle2D.Double(x3, y3, w3, h3);
 					g.setColor(Color.blue);
 					g.fill(airportCRecc);
@@ -160,6 +163,27 @@ public class MapAgent implements IMapService {
 					g.setFont(f1);
 					String cap3 = "This is: " + (s3);
 					g.drawString(cap3, (int) x3, (int) (y3 + 70));
+
+					// arrivalAirport (Airport D)
+					double w4 = 75;
+					double h4 = 50;
+					double x4 = airportD.getXAsDouble() * 30;
+					x4 = x4 - (w4 / 2);
+					double y4 = airportD.getYAsDouble() * 30;
+					y4 = y4 - (h2 / 2);
+					Rectangle2D airportDRecc = new Rectangle2D.Double(x4, y4, w4, h4);
+					g.setColor(Color.green);
+					g.fill(airportDRecc);
+					// Arrival airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s4 = "Airport D";
+					g.drawString(s4, (int) x4, (int) (y4 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap4 = "This is: " + (s4);
+					g.drawString(cap4, (int) x4, (int) (y4 + 70));
 
 					// Plane
 					if (plane != null && plane2 != null) {
@@ -232,9 +256,10 @@ public class MapAgent implements IMapService {
 		return IFuture.DONE;
 	};
 
-	public IFuture<Void> setPlaneTarget(IVector2 target) {
+	public IFuture<Void> setPlaneTarget(String id, IVector2 target) {
 		Future<Void> ret = new Future<>();
 		synchronized (this) {
+			Plane plane = planeList.get(id);
 			plane.setTarget(target);
 			plane.setTargetArrived(ret);
 		}
