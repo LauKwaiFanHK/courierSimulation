@@ -18,13 +18,17 @@ public class Plane {
 
 	private PlaneDirection myDirection;
 	private Future<Void> targetArrived;
+	private int capacity;
+	private int numberOfParcelsLoaded;
 
 	public Plane(String id, IVector2 startPosition) {
 		this.id = id;
 		this.currentPosition = startPosition;
 		this.speed = 0.0;
 		this.myDirection = PlaneDirection.NONE;
-		this.fullyLoaded = true;
+		this.fullyLoaded = false;
+		this.capacity = 10000;
+		this.numberOfParcelsLoaded = 0;
 	}
 
 	public double getCurrentPositionX(IVector2 currentPosition) {
@@ -120,7 +124,7 @@ public class Plane {
 	}
 
 	public void movePlane(IVector2 newUnitVector) {
-		this.setSpeed(0.01);
+		this.setSpeed(0.005);
 		System.out.println("Plane: " + this.getId() + " current Position: " + currentPosition);
 		System.out.println("Speed: " + this.getSpeed() + "\n----");
 		IVector2 positionDelta = newUnitVector.multiply(speed);
@@ -132,6 +136,27 @@ public class Plane {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void loadParcel() {
+		while (!(numberOfParcelsLoaded == this.capacity)) {
+			numberOfParcelsLoaded += 1;
+			System.out.println("Plane: " + id + " has loaded " + numberOfParcelsLoaded
+					+ " parcels. \n plane is fully loaded: " + this.fullyLoaded);
+		}
+		if (numberOfParcelsLoaded == this.capacity) {
+			this.fullyLoaded = true;
+		}
+	}
+
+	public void unloadParcel() {
+		while (!(numberOfParcelsLoaded == 0)) {
+			numberOfParcelsLoaded -= 1;
+			this.fullyLoaded = false;
+			int parcelUnloaded = this.capacity - numberOfParcelsLoaded;
+			System.out.println("Plane: " + id + " has unloaded " + parcelUnloaded
+					+ " parcels. \n plane is fully loaded: " + this.fullyLoaded);
 		}
 	}
 
@@ -187,6 +212,14 @@ public class Plane {
 
 	public String getId() {
 		return id;
+	}
+
+	public int getNumberOfParcelsLoaded() {
+		return numberOfParcelsLoaded;
+	}
+
+	public int getCapacity() {
+		return capacity;
 	}
 
 }

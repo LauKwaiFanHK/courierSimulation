@@ -202,7 +202,7 @@ public class MapAgent implements IMapService {
 							// capacity text
 							g.setColor(Color.black);
 							g.setFont(f1);
-							String capPlane = "Plane's is fully loaded: " + (plane.isFullyLoaded());
+							String capPlane = "Number of parcels in plane: " + (plane.getNumberOfParcelsLoaded());
 							g.drawString(capPlane, (int) x, (int) (y + 70));
 						}
 					}
@@ -220,11 +220,15 @@ public class MapAgent implements IMapService {
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
 							if (!plane.hasArrived()) {
+								if (plane.getNumberOfParcelsLoaded() < plane.getCapacity()) {
+									plane.loadParcel();
+								}
 								plane.updatePos(1);
 							} else {
 								if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
 									plane.getTargetArrived().setResult(null);
 									plane.setTargetArrived(null);
+									plane.unloadParcel();
 								}
 							}
 						}
