@@ -171,51 +171,6 @@ public class Plane {
 					+ this.fullyLoaded);
 		}
 	}
-//			bar.setText(text);
-
-//			try {
-//				System.out.println("sleeping for 5 seconds");
-//				Thread.sleep(5000);
-//			} catch (InterruptedException ie) {
-//				System.out.println("interrupted while sleeping");
-//			}
-//			System.out.println("creating the code block for an event thread");
-//			bar.setValue(50);
-//			Runnable setTextRun = new Runnable() {
-//				public void run() {
-//					try {
-//						Thread.sleep(100);
-//						double x = (double) parcelUnloaded / capacity;
-//						int parcelLoadedRate = (int) (x * 100);
-//						System.out.println("about to do setText()");
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//						System.out.println("*****about to do setText()");
-//					}
-//				}
-//			};
-//			System.out.println("about to call invokeLater()");
-//			SwingUtilities.invokeLater(setTextRun);
-//			System.out.println("back from invokeLater()");
-//			
-//			SwingWorker<List<Integer>, Integer> worker = new SwingWorker<Integer, Integer>() {
-//				@Override
-//				public List<Integer> doInBackground() {
-//					double x = (double) parcelUnloaded / capacity;
-//					int parcelLoadedRate = (int) (x * 100);
-//					return parcelLoadedRate;
-//				}
-//
-//				@Override
-//				protected void done() {
-//					try {
-//						bar.setValue(get());
-//					} catch (Exception ignore) {
-//					}
-//				}
-//			};
-
-//		bar.setString("Plane is fully unloaded!");
 
 	public IVector2 getCurrentPosition() {
 		return currentPosition;
