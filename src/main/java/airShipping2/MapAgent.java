@@ -6,16 +6,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 
 import com.jhlabs.vecmath.Color4f;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -44,11 +56,12 @@ public class MapAgent implements IMapService {
 	@Agent
 	private IInternalAccess agent;
 
-	private JFrame frame;
-
+	static JFrame frame;
+	static JPanel panel;
 	private Plane plane;
 	private Plane plane2;
 	private Map<String, Plane> planeList = new HashMap<>();
+	private Map<String, JProgressBar> barList = new HashMap<>();
 
 	private IComponentStep<Void> simulationstep;
 
@@ -60,8 +73,16 @@ public class MapAgent implements IMapService {
 
 		SwingUtilities.invokeLater(() -> {
 			frame = new JFrame("Environment Simulation v1.0");
-			frame.setSize(600, 600);
+			frame.setSize(1000, 1000);
 			frame.setVisible(true);
+			System.out.println("Frame's layout: " + frame.getLayout());
+
+			Container pane = frame.getContentPane();
+			pane.setLayout(null);
+			panel = new JPanel();
+			pane.add(panel);
+			panel.setBounds(0, 610, 1000, 110);
+			panel.setBackground(Color.gray);
 
 			agent.getExternalAccess().scheduleStep(new IComponentStep<Void>() {
 				public IFuture<Void> execute(IInternalAccess ia) {
@@ -89,7 +110,6 @@ public class MapAgent implements IMapService {
 				synchronized (MapAgent.this) {
 //					System.out.println("Plane: " + plane);
 					Container pane = frame.getContentPane();
-
 					// uncomment 2 next line, then comment the 3rd next line, then go to line 165
 					BufferedImage img = new BufferedImage(pane.getWidth(), pane.getHeight(),
 							BufferedImage.TYPE_4BYTE_ABGR_PRE);
@@ -98,7 +118,7 @@ public class MapAgent implements IMapService {
 
 					// grid
 					g.setColor(Color.pink);
-					g.fillRect(0, 0, pane.getWidth(), pane.getHeight());
+					g.fillRect(0, 0, pane.getWidth(), (pane.getHeight() - 100));
 
 					// departAirport (Airport A)
 					double w1 = 75;
@@ -202,10 +222,16 @@ public class MapAgent implements IMapService {
 							// capacity text
 							g.setColor(Color.black);
 							g.setFont(f1);
-							String capPlane = "Number of parcels in plane: " + (plane.getNumberOfParcelsLoaded());
+							String capPlane = plane.getNumberOfParcelsLoaded() + " parcels in plane";
 							g.drawString(capPlane, (int) x, (int) (y + 70));
+
+							JProgressBar bar = barList.get(plane.getId());
+							if (bar != null) {
+								bar.setValue(plane.getOccupacyRate());
+							}
 						}
 					}
+
 					// uncomment 2 next line
 					Graphics2D gScreen = (Graphics2D) pane.getGraphics();
 					gScreen.drawImage(img, 0, 0, null);
@@ -215,12 +241,13 @@ public class MapAgent implements IMapService {
 		swingtimer.start();
 
 		simulationstep = new IComponentStep<Void>() {
+
 			public IFuture<Void> execute(IInternalAccess ia) {
 				synchronized (MapAgent.this) {
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
 							if (!plane.hasArrived()) {
-								if (plane.getNumberOfParcelsLoaded() < plane.getCapacity()) {
+								if (plane.getNumberOfParcelsLoaded() == 0) {
 									plane.loadParcel();
 								}
 								plane.updatePos(1);
@@ -237,6 +264,7 @@ public class MapAgent implements IMapService {
 				}
 				return IFuture.DONE;
 			}
+
 		};
 		agent.scheduleStep(simulationstep);
 
@@ -244,17 +272,45 @@ public class MapAgent implements IMapService {
 
 	}
 
+//	public void fill(int capacity, JProgressBar bar) {
+//		int parcelLoaded = 0;
+//		int parcelLoadedRate = (int) parcelLoaded / capacity;
+//		while (parcelLoadedRate <= 100) {
+//			bar.setValue(parcelLoadedRate);
+//			try {
+//				Thread.sleep(500); // simulate progress bar increases over time
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			parcelLoadedRate += 1; // count backwards, use -=1
+//		}
+//		bar.setString("Plane is fully loaded!");
+//	}
+
 	public IFuture<Void> createPlane(String id, IVector2 startPosition, String id2, IVector2 startPosition2) {
 
 		synchronized (this) {
 			plane = new Plane(id, startPosition);
 			System.out.println("A plane is created: " + id);
+			plane.loadParcel();
 
 			plane2 = new Plane(id2, startPosition2);
 			System.out.println("A second plane is created: " + id2);
+			plane2.loadParcel();
 
 			planeList.put(id, plane);
 			planeList.put(id2, plane2);
+
+			for (Plane plane : planeList.values()) {
+				JLabel text_plane = new JLabel();
+				JProgressBar bar_plane = new JProgressBar();
+				panel.add(text_plane);
+				panel.add(bar_plane);
+				text_plane.setText(plane.getId() + "'s current occupacy: ");
+				bar_plane.setValue(plane.getOccupacyRate());
+				bar_plane.setStringPainted(true);
+				barList.put(plane.getId(), bar_plane);
+			}
 		}
 
 		return IFuture.DONE;

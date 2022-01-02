@@ -1,5 +1,10 @@
 package airShipping2;
 
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+
+import EDU.oswego.cs.dl.util.concurrent.misc.SwingWorker;
 import jadex.commons.future.Future;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
@@ -20,6 +25,7 @@ public class Plane {
 	private Future<Void> targetArrived;
 	private int capacity;
 	private int numberOfParcelsLoaded;
+	private int occupacyRate;
 
 	public Plane(String id, IVector2 startPosition) {
 		this.id = id;
@@ -27,7 +33,7 @@ public class Plane {
 		this.speed = 0.0;
 		this.myDirection = PlaneDirection.NONE;
 		this.fullyLoaded = false;
-		this.capacity = 10000;
+		this.capacity = 100;
 		this.numberOfParcelsLoaded = 0;
 	}
 
@@ -57,7 +63,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else if (fullyLoaded) {
+			} else /* if (fullyLoaded) */ {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -67,7 +73,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else if (fullyLoaded) {
+			} else /* if (fullyLoaded) */ {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -77,7 +83,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else if (fullyLoaded) {
+			} else /* if (fullyLoaded) */ {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -87,7 +93,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else if (fullyLoaded) {
+			} else /* if (fullyLoaded) */ {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -142,23 +148,74 @@ public class Plane {
 	public void loadParcel() {
 		while (!(numberOfParcelsLoaded == this.capacity)) {
 			numberOfParcelsLoaded += 1;
-			System.out.println("Plane: " + id + " has loaded " + numberOfParcelsLoaded
-					+ " parcels. \n plane is fully loaded: " + this.fullyLoaded);
+			this.setOccupacyRate(numberOfParcelsLoaded);
+			System.out.println("Plane: " + id + " has loaded " + numberOfParcelsLoaded + " parcels.");
 		}
 		if (numberOfParcelsLoaded == this.capacity) {
 			this.fullyLoaded = true;
+			this.setOccupacyRate(this.capacity);
 		}
+		System.out.println("plane is fully loaded: " + this.fullyLoaded);
 	}
 
 	public void unloadParcel() {
-		while (!(numberOfParcelsLoaded == 0)) {
-			numberOfParcelsLoaded -= 1;
+		int min = 0;
+		int max = this.getNumberOfParcelsLoaded();
+		int random_int = (int) Math.floor(Math.random() * (max - min + 1) + min);
+
+		numberOfParcelsLoaded -= random_int;
+		if (!(this.getNumberOfParcelsLoaded() == this.getCapacity())) {
 			this.fullyLoaded = false;
-			int parcelUnloaded = this.capacity - numberOfParcelsLoaded;
-			System.out.println("Plane: " + id + " has unloaded " + parcelUnloaded
-					+ " parcels. \n plane is fully loaded: " + this.fullyLoaded);
+			this.setOccupacyRate(numberOfParcelsLoaded);
+			System.out.println("Plane: " + id + " has unloaded " + random_int + " parcels. \n plane is fully loaded: "
+					+ this.fullyLoaded);
 		}
 	}
+//			bar.setText(text);
+
+//			try {
+//				System.out.println("sleeping for 5 seconds");
+//				Thread.sleep(5000);
+//			} catch (InterruptedException ie) {
+//				System.out.println("interrupted while sleeping");
+//			}
+//			System.out.println("creating the code block for an event thread");
+//			bar.setValue(50);
+//			Runnable setTextRun = new Runnable() {
+//				public void run() {
+//					try {
+//						Thread.sleep(100);
+//						double x = (double) parcelUnloaded / capacity;
+//						int parcelLoadedRate = (int) (x * 100);
+//						System.out.println("about to do setText()");
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						System.out.println("*****about to do setText()");
+//					}
+//				}
+//			};
+//			System.out.println("about to call invokeLater()");
+//			SwingUtilities.invokeLater(setTextRun);
+//			System.out.println("back from invokeLater()");
+//			
+//			SwingWorker<List<Integer>, Integer> worker = new SwingWorker<Integer, Integer>() {
+//				@Override
+//				public List<Integer> doInBackground() {
+//					double x = (double) parcelUnloaded / capacity;
+//					int parcelLoadedRate = (int) (x * 100);
+//					return parcelLoadedRate;
+//				}
+//
+//				@Override
+//				protected void done() {
+//					try {
+//						bar.setValue(get());
+//					} catch (Exception ignore) {
+//					}
+//				}
+//			};
+
+//		bar.setString("Plane is fully unloaded!");
 
 	public IVector2 getCurrentPosition() {
 		return currentPosition;
@@ -220,6 +277,16 @@ public class Plane {
 
 	public int getCapacity() {
 		return capacity;
+	}
+
+	public int getOccupacyRate() {
+		return occupacyRate;
+	}
+
+	public void setOccupacyRate(int numberOfParcelsLoaded) {
+		double planeOccupacy = (double) numberOfParcelsLoaded / capacity;
+		int planeOccupacyRate = (int) (planeOccupacy * 100);
+		this.occupacyRate = planeOccupacyRate;
 	}
 
 }
