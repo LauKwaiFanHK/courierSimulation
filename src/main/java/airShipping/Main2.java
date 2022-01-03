@@ -32,6 +32,7 @@ public class Main2 {
 		IExternalAccess envagent = platform.createComponent(ci).get();
 		System.out.println("Got MapAgent using get() " + envagent);
 
+		// plane agent
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
 		platform.createComponent(ci).get();
