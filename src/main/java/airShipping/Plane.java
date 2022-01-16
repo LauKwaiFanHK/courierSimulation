@@ -1,5 +1,7 @@
 package airShipping;
 
+import java.util.Random;
+
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -28,13 +30,13 @@ public class Plane {
 	private int numberOfParcelsLoaded;
 	private int occupacyRate;
 
-	public Plane(String id, IVector2 startPosition) {
+	public Plane(String id, IVector2 startPosition, int capacity) {
 		this.id = id;
 		this.currentPosition = startPosition;
 		this.speed = 0.0;
 		this.myDirection = PlaneDirection.NONE;
 		this.fullyLoaded = false;
-		this.capacity = 100;
+		this.capacity = capacity;
 		this.numberOfParcelsLoaded = 0;
 	}
 
@@ -162,7 +164,8 @@ public class Plane {
 	public void unloadParcel() {
 		int min = 0;
 		int max = this.getNumberOfParcelsLoaded();
-		int random_int = (int) Math.floor(Math.random() * (max - min + 1) + min);
+		Random random = new Random();
+		int random_int = random.nextInt(max - min) + min + 1;
 
 		numberOfParcelsLoaded -= random_int;
 		if (!(this.getNumberOfParcelsLoaded() == this.getCapacity())) {

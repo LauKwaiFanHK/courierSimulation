@@ -30,6 +30,8 @@ public class PlaneAgent implements IPlaneService {
 	@AgentArgument
 	private IVector2 planeStartPosition = new Vector2Double(0.0, 0.0);
 	@AgentArgument
+	private int capacity = 0;
+	@AgentArgument
 	private ArrayList<IVector2> route = new ArrayList<>();
 
 	@OnInit
@@ -42,7 +44,7 @@ public class PlaneAgent implements IPlaneService {
 
 //		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportB());
 
-		IFuture<Void> done = mapService.createPlane2(planeID, planeStartPosition);
+		IFuture<Void> done = mapService.createPlane2(planeID, planeStartPosition, capacity);
 
 		System.out.println("Plane Agent found: " + mapService);
 

@@ -11,5 +11,5 @@ public interface IMapService {
 	public IFuture<Void> setPlaneTarget(String id, IVector2 target);
 
 	// test
-	public IFuture<Void> createPlane2(String id, IVector2 startPosition);
+	public IFuture<Void> createPlane2(String id, IVector2 startPosition, int capacity);
 }

@@ -58,6 +58,7 @@ public class Main2 {
 		ci.addArgument("planeID", "ABC");
 		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", expressRoute);
+		ci.addArgument("capacity", 100);
 		platform.createComponent(ci).get();
 
 		// plane agent for XYZ
@@ -66,6 +67,7 @@ public class Main2 {
 		ci.addArgument("planeID", "XYZ");
 		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", normalRoute);
+		ci.addArgument("capacity", 5000);
 		platform.createComponent(ci).get();
 
 		// plane agent for LMN
@@ -74,6 +76,7 @@ public class Main2 {
 		ci.addArgument("planeID", "LMN");
 		ci.addArgument("planeStartPosition", airports.getAirportE());
 		ci.addArgument("route", normalRoute2);
+		ci.addArgument("capacity", 5000);
 		platform.createComponent(ci).get();
 
 		// plane agent for OPQ
@@ -82,6 +85,7 @@ public class Main2 {
 		ci.addArgument("planeID", "OPQ");
 		ci.addArgument("planeStartPosition", airports.getAirportE());
 		ci.addArgument("route", expressRoute2);
+		ci.addArgument("capacity", 100);
 		platform.createComponent(ci).get();
 
 		platform.scheduleStep(new IComponentStep<Void>() {

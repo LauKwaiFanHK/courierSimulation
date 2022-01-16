@@ -405,11 +405,11 @@ public class MapAgent implements IMapService {
 //	};
 
 	// test
-	public IFuture<Void> createPlane2(String id, IVector2 startPosition) {
+	public IFuture<Void> createPlane2(String id, IVector2 startPosition, int capacity) {
 
 		synchronized (this) {
 
-			plane = new Plane(id, startPosition);
+			plane = new Plane(id, startPosition, capacity);
 			System.out.println("A plane is created: " + id);
 			System.out.println("Plane's start position is: " + startPosition);
 			plane.loadParcel();
