@@ -20,6 +20,15 @@ import jadex.micro.annotation.Agent;
 public class Main2 {
 
 	public static void main(String[] args) {
+		final Airports airports = new Airports();
+
+		final Routes route = new Routes();
+		route.setExpressRoute();
+		ArrayList<IVector2> expressRoute = route.getExpressRoute();
+
+		final Routes route2 = new Routes();
+		route2.setNormalRoute();
+		ArrayList<IVector2> normalRoute = route2.getNormalRoute();
 
 		System.out.println("Starting...");
 		IPlatformConfiguration config = PlatformConfigurationHandler.getMinimal();
@@ -35,17 +44,20 @@ public class Main2 {
 		IExternalAccess envagent = platform.createComponent(ci).get();
 		System.out.println("Got MapAgent using get() " + envagent);
 
-		final Airports airports = new Airports();
-		ArrayList<IVector2> expressRoute = new ArrayList<>();
-		// route B-A-B
-		expressRoute.add(airports.getAirportA());
-		expressRoute.add(airports.getAirportB());
-		// plane agent
+		// plane agent for ABC
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
 		ci.addArgument("planeID", "ABC");
-		ci.addArgument("planeStartPosition", new Vector2Double(13.8, 2.5));
+		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", expressRoute);
+		platform.createComponent(ci).get();
+
+		// plane agent for XYZ
+		ci = new CreationInfo();
+		ci.setFilenameClass(PlaneAgent.class);
+		ci.addArgument("planeID", "XYZ");
+		ci.addArgument("planeStartPosition", airports.getAirportB());
+		ci.addArgument("route", normalRoute);
 		platform.createComponent(ci).get();
 
 		platform.scheduleStep(new IComponentStep<Void>() {

@@ -25,30 +25,15 @@ public class PlaneAgent implements IPlaneService {
 
 	private IMapService mapService;
 
-	private Airports airports = new Airports();
-
-	private ArrayList<IVector2> normalRoute = new ArrayList<>();
-
-	private ArrayList<IVector2> expressRoute = new ArrayList<>();
-
 	@AgentArgument
 	private String planeID = "000";
 	@AgentArgument
 	private IVector2 planeStartPosition = new Vector2Double(0.0, 0.0);
 	@AgentArgument
-	private ArrayList<IVector2> route = normalRoute;
+	private ArrayList<IVector2> route = new ArrayList<>();
 
 	@OnInit
 	public IFuture<Void> agentInit() {
-		// route B-C-D-A-B
-		normalRoute.add(airports.getAirportC());
-		normalRoute.add(airports.getAirportD());
-		normalRoute.add(airports.getAirportA());
-		normalRoute.add(airports.getAirportB());
-
-		// route B-A-B
-		expressRoute.add(airports.getAirportA());
-		expressRoute.add(airports.getAirportB());
 
 		ServiceQuery<IMapService> query = new ServiceQuery<IMapService>(IMapService.class);
 		query.setScope(ServiceScope.PLATFORM);
