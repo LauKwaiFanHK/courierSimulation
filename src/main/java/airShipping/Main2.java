@@ -23,12 +23,20 @@ public class Main2 {
 		final Airports airports = new Airports();
 
 		final Routes route = new Routes();
-		route.setExpressRoute();
-		ArrayList<IVector2> expressRoute = route.getExpressRoute();
+		route.setExpressRouteBA();
+		ArrayList<IVector2> expressRoute = route.getExpressRouteBA();
 
 		final Routes route2 = new Routes();
-		route2.setNormalRoute();
-		ArrayList<IVector2> normalRoute = route2.getNormalRoute();
+		route2.setNormalRouteBCDAB();
+		ArrayList<IVector2> normalRoute = route2.getNormalRouteBCDAB();
+
+		final Routes route3 = new Routes();
+		route3.setNormalRouteEFGHE();
+		ArrayList<IVector2> normalRoute2 = route3.getNormalRouteEFGHE();
+
+		final Routes route4 = new Routes();
+		route4.setExpressRouteEH();
+		ArrayList<IVector2> expressRoute2 = route4.getExpressRouteEH();
 
 		System.out.println("Starting...");
 		IPlatformConfiguration config = PlatformConfigurationHandler.getMinimal();
@@ -58,6 +66,22 @@ public class Main2 {
 		ci.addArgument("planeID", "XYZ");
 		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", normalRoute);
+		platform.createComponent(ci).get();
+
+		// plane agent for LMN
+		ci = new CreationInfo();
+		ci.setFilenameClass(PlaneAgent.class);
+		ci.addArgument("planeID", "LMN");
+		ci.addArgument("planeStartPosition", airports.getAirportE());
+		ci.addArgument("route", normalRoute2);
+		platform.createComponent(ci).get();
+
+		// plane agent for OPQ
+		ci = new CreationInfo();
+		ci.setFilenameClass(PlaneAgent.class);
+		ci.addArgument("planeID", "OPQ");
+		ci.addArgument("planeStartPosition", airports.getAirportE());
+		ci.addArgument("route", expressRoute2);
 		platform.createComponent(ci).get();
 
 		platform.scheduleStep(new IComponentStep<Void>() {

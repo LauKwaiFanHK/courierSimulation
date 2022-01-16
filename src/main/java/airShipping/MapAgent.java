@@ -104,6 +104,10 @@ public class MapAgent implements IMapService {
 		IVector2 airportB = airports.getAirportB();
 		IVector2 airportC = airports.getAirportC();
 		IVector2 airportD = airports.getAirportD();
+		IVector2 airportE = airports.getAirportE();
+		IVector2 airportF = airports.getAirportF();
+		IVector2 airportG = airports.getAirportG();
+		IVector2 airportH = airports.getAirportH();
 
 		Timer swingtimer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -205,8 +209,91 @@ public class MapAgent implements IMapService {
 					String cap4 = "This is: " + (s4);
 					g.drawString(cap4, (int) x4, (int) (y4 + 70));
 
+					// departAirport (Airport E)
+					double w5 = 75;
+					double h5 = 50;
+					double x5 = airportE.getXAsDouble() * 30;
+					x5 = x5 - (w5 / 2);
+					double y5 = airportE.getYAsDouble() * 30;
+					y5 = y5 - (h5 / 2);
+					Rectangle2D eAirportRec = new Rectangle2D.Double(x5, y5, w5, h5);
+					g.setColor(Color.darkGray);
+					g.fill(eAirportRec);
+					// Depart airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s5 = "Airport E";
+					g.drawString(s5, (int) x5, (int) (y5 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap5 = "This is: " + (s5);
+					g.drawString(cap5, (int) x5, (int) (y5 + 70));
+
+					// arrivalAirport (Airport F)
+					double w6 = 75;
+					double h6 = 50;
+					double x6 = airportF.getXAsDouble() * 30;
+					x6 = x6 - (w6 / 2);
+					double y6 = airportF.getYAsDouble() * 30;
+					y6 = y6 - (h6 / 2);
+					Rectangle2D planeRecF = new Rectangle2D.Double(x6, y6, w6, h6);
+					g.setColor(Color.yellow);
+					g.fill(planeRecF);
+					// Arrival airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s6 = "Airport F";
+					g.drawString(s6, (int) x6, (int) (y6 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap6 = "This is: " + (s6);
+					g.drawString(cap6, (int) x6, (int) (y6 + 70));
+
+					// arrivalAirport (Airport G)
+					double w7 = 75;
+					double h7 = 50;
+					double x7 = airportG.getXAsDouble() * 30;
+					x7 = x7 - (w3 / 2);
+					double y7 = airportG.getYAsDouble() * 30;
+					y3 = y3 - (h2 / 2);
+					Rectangle2D airportGRecc = new Rectangle2D.Double(x7, y7, w7, h7);
+					g.setColor(Color.blue);
+					g.fill(airportGRecc);
+					// Arrival airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s7 = "Airport G";
+					g.drawString(s7, (int) x7, (int) (y7 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap7 = "This is: " + (s7);
+					g.drawString(cap7, (int) x7, (int) (y7 + 70));
+
+					// arrivalAirport (Airport H)
+					double w8 = 75;
+					double h8 = 50;
+					double x8 = airportH.getXAsDouble() * 30;
+					x8 = x8 - (w8 / 2);
+					double y8 = airportH.getYAsDouble() * 30;
+					y8 = y8 - (h8 / 2);
+					Rectangle2D airportHRecc = new Rectangle2D.Double(x8, y8, w8, h8);
+					g.setColor(Color.green);
+					g.fill(airportHRecc);
+					// Arrival airport text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String s8 = "Airport H";
+					g.drawString(s4, (int) x4, (int) (y4 - 10));
+					// capacity text
+					g.setColor(Color.black);
+					g.setFont(f1);
+					String cap8 = "This is: " + (s8);
+					g.drawString(cap8, (int) x8, (int) (y8 + 70));
+
 					// Plane
-					// test
 					if (plane != null /* && plane2 != null */) {
 						for (Plane plane : planeList.values()) {
 							double w = 15;
