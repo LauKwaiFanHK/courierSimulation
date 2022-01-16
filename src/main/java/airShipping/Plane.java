@@ -8,6 +8,7 @@ import EDU.oswego.cs.dl.util.concurrent.misc.SwingWorker;
 import jadex.commons.future.Future;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
+import jadex.micro.annotation.AgentArgument;
 
 public class Plane {
 

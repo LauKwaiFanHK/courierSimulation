@@ -31,6 +31,13 @@ public class PlaneAgent implements IPlaneService {
 
 	private ArrayList<IVector2> expressRoute = new ArrayList<>();
 
+	@AgentArgument
+	private String planeID = "000";
+	@AgentArgument
+	private IVector2 planeStartPosition = new Vector2Double(0.0, 0.0);
+	@AgentArgument
+	private ArrayList<IVector2> route = normalRoute;
+
 	@OnInit
 	public IFuture<Void> agentInit() {
 		// route B-C-D-A-B
@@ -48,7 +55,9 @@ public class PlaneAgent implements IPlaneService {
 
 		mapService = agent.getLocalService(query);
 
-		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportB());
+//		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportB());
+
+		IFuture<Void> done = mapService.createPlane2(planeID, planeStartPosition);
 
 		System.out.println("Plane Agent found: " + mapService);
 
@@ -63,35 +72,37 @@ public class PlaneAgent implements IPlaneService {
 			int i = 0;
 
 			public void resultAvailable(Void done) {
-				i = (i + 1) % normalRoute.size();
-				IFuture<Void> arrived = mapService.setPlaneTarget("ABC", normalRoute.get(i));
+				i = (i + 1) % route.size();
+				IFuture<Void> arrived = mapService.setPlaneTarget(/* "ABC" */ planeID, route.get(i));
 				arrived.addResultListener(this);
-				System.out.println("Plane has arrived at " + normalRoute.get(i - 1));
+				System.out.println("Plane has arrived at " + route.get(i - 1));
 			}
 
 			public void exceptionOccurred(Exception e) {
 			}
 		};
 
-		IResultListener<Void> rl2 = new IResultListener<Void>() {
-			int i = 0;
+		// test
+//		IResultListener<Void> rl2 = new IResultListener<Void>() {
+//			int i = 0;
+//
+//			public void resultAvailable(Void done) {
+//				i = (i + 1) % expressRoute.size();
+//				IFuture<Void> arrived = mapService.setPlaneTarget("XYZ", expressRoute.get(i));
+//				arrived.addResultListener(this);
+//				System.out.println("Plane has arrived at " + expressRoute.get(i - 1));
+//			}
+//
+//			public void exceptionOccurred(Exception e) {
+//			}
+//		};
 
-			public void resultAvailable(Void done) {
-				i = (i + 1) % expressRoute.size();
-				IFuture<Void> arrived = mapService.setPlaneTarget("XYZ", expressRoute.get(i));
-				arrived.addResultListener(this);
-				System.out.println("Plane has arrived at " + expressRoute.get(i - 1));
-			}
-
-			public void exceptionOccurred(Exception e) {
-			}
-		};
-
-		IFuture<Void> arrived = mapService.setPlaneTarget("ABC", normalRoute.get(0));
+		IFuture<Void> arrived = mapService.setPlaneTarget(/* "ABC" */planeID, route.get(0));
 		arrived.addResultListener(rl);
 
-		IFuture<Void> arrived2 = mapService.setPlaneTarget("XYZ", expressRoute.get(0));
-		arrived2.addResultListener(rl2);
+		// test
+//		IFuture<Void> arrived2 = mapService.setPlaneTarget("XYZ", expressRoute.get(0));
+//		arrived2.addResultListener(rl2);
 
 		return new Future<Void>();
 	}
