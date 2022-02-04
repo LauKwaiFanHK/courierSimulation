@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -68,7 +69,7 @@ public class MapAgent implements IMapService {
 
 	private Airports airports = new Airports();
 
-	HashMap<IVector2, String> airportsWeather = new HashMap<>();
+	HashMap<IVector2, Image> airportsWeather = new HashMap<>();
 
 	private long timestamp;
 	private double counter;
@@ -151,8 +152,8 @@ public class MapAgent implements IMapService {
 					g.setColor(Color.black);
 					g.setFont(f1);
 
-					String cap1 = airportsWeather.get(airportA);
-					g.drawString(cap1, (int) x1, (int) (y1 + 70));
+					Image airp1_weather = airportsWeather.get(airportA);
+					g.drawImage(airp1_weather, (int) (x1 + 20), (int) (y1 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport B)
 					double w2 = 84;
@@ -172,8 +173,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap2 = airportsWeather.get(airportB);
-					g.drawString(cap2, (int) x2, (int) (y2 + 70));
+					Image airp2_weather = airportsWeather.get(airportB);
+					g.drawImage(airp2_weather, (int) (x2 + 20), (int) (y2 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport C)
 					double w3 = 84;
@@ -193,8 +194,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap3 = airportsWeather.get(airportC);
-					g.drawString(cap3, (int) x3, (int) (y3 + 70));
+					Image cap3_weather = airportsWeather.get(airportC);
+					g.drawImage(cap3_weather, (int) (x3 + 20), (int) (y3 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport D)
 					double w4 = 84;
@@ -214,8 +215,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap4 = airportsWeather.get(airportD);
-					g.drawString(cap4, (int) x4, (int) (y4 + 70));
+					Image cap4_weather = airportsWeather.get(airportD);
+					g.drawImage(cap4_weather, (int) (x4 + 20), (int) (y4 + 50), 50, 50, null);
 
 					// departAirport (Airport E)
 					double w5 = 75;
@@ -234,8 +235,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap5 = airportsWeather.get(airportE);
-					g.drawString(cap5, (int) x5, (int) (y5 + 70));
+					Image cap5_weather = airportsWeather.get(airportE);
+					g.drawImage(cap5_weather, (int) (x5 + 20), (int) (y5 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport F)
 					double w6 = 75;
@@ -254,8 +255,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap6 = airportsWeather.get(airportF);
-					g.drawString(cap6, (int) x6, (int) (y6 + 70));
+					Image cap6_weather = airportsWeather.get(airportF);
+					g.drawImage(cap6_weather, (int) (x6 + 20), (int) (y6 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport G)
 					double w7 = 75;
@@ -274,8 +275,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap7 = airportsWeather.get(airportG);
-					g.drawString(cap7, (int) x7, (int) (y7 + 70));
+					Image cap7_weather = airportsWeather.get(airportG);
+					g.drawImage(cap7_weather, (int) (x7 + 20), (int) (y7 + 50), 50, 50, null);
 
 					// arrivalAirport (Airport H)
 					double w8 = 75;
@@ -294,8 +295,8 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap8 = airportsWeather.get(airportH);
-					g.drawString(cap8, (int) x8, (int) (y8 + 70));
+					Image cap8_weather = airportsWeather.get(airportH);
+					g.drawImage(cap8_weather, (int) (x8 + 20), (int) (y8 + 50), 50, 50, null);
 
 					// Plane
 					if (plane != null) {
@@ -346,8 +347,8 @@ public class MapAgent implements IMapService {
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
 							IVector2 startPos = plane.getCurrentPosition();
-							String startAirportWeather = airportsWeather.get(startPos);
-							if (!(startAirportWeather == "storm")) {
+							Image startAirportWeather = airportsWeather.get(startPos);
+							if (!(startAirportWeather == weathers.getWeather().get(5))) {
 								if (!plane.hasArrived()) {
 									if (plane.getNumberOfParcelsLoaded() == 0) {
 										plane.loadParcel();

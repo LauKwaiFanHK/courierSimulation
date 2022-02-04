@@ -3,29 +3,37 @@ package airShipping;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 import jadex.extension.envsupport.math.IVector2;
 
 public class AirportsWeather {
 
-	private Map<Integer, String> weathers = new HashMap<>();
+	private Map<Integer, Image> weathers = new HashMap<>();
+	Image sunnyIcon = Toolkit.getDefaultToolkit().getImage("sun.png");
+	Image sunshineIcon = Toolkit.getDefaultToolkit().getImage("sunshine.png");
+	Image snowIcon = Toolkit.getDefaultToolkit().getImage("snowflake.png");
+	Image rainyIcon = Toolkit.getDefaultToolkit().getImage("rainy.png");
+	Image cloudyIcon = Toolkit.getDefaultToolkit().getImage("clouds.png");
+	Image stormIcon = Toolkit.getDefaultToolkit().getImage("storm.png");
 
 	public AirportsWeather() {
-		weathers.put(0, "sunny");
-		weathers.put(1, "cloudy");
-		weathers.put(2, "storm");
-		weathers.put(3, "rainy");
-		weathers.put(4, "snowy");
-		weathers.put(5, "rainy");
+		weathers.put(0, sunnyIcon);
+		weathers.put(1, sunshineIcon);
+		weathers.put(2, snowIcon);
+		weathers.put(3, rainyIcon);
+		weathers.put(4, cloudyIcon);
+		weathers.put(5, stormIcon);
 	}
 
-	public Map<Integer, String> getWeather() {
+	public Map<Integer, Image> getWeather() {
 		return weathers;
 	}
 
-	public HashMap<IVector2, String> updateAirportsWeather() {
+	public HashMap<IVector2, Image> updateAirportsWeather() {
 		Airports airports = new Airports();
-		HashMap<IVector2, String> airportsWeather = new HashMap<>();
+		HashMap<IVector2, Image> airportsWeather = new HashMap<>();
 		airportsWeather.put(airports.getAirportA(), generateRandomWeather());
 		airportsWeather.put(airports.getAirportB(), generateRandomWeather());
 		airportsWeather.put(airports.getAirportC(), generateRandomWeather());
@@ -37,9 +45,9 @@ public class AirportsWeather {
 		return airportsWeather;
 	}
 
-	public String generateRandomWeather() {
+	public Image generateRandomWeather() {
 		int weatherID = (int) (Math.random() * weathers.size());
-		String currentWeather = weathers.get(weatherID);
+		Image currentWeather = weathers.get(weatherID);
 		return currentWeather;
 	}
 }
