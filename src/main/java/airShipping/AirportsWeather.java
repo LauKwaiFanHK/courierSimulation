@@ -14,6 +14,9 @@ public class AirportsWeather {
 		weathers.put(0, "sunny");
 		weathers.put(1, "cloudy");
 		weathers.put(2, "storm");
+		weathers.put(3, "rainy");
+		weathers.put(4, "snowy");
+		weathers.put(5, "rainy");
 	}
 
 	public Map<Integer, String> getWeather() {

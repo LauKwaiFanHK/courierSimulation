@@ -116,12 +116,10 @@ public class MapAgent implements IMapService {
 		IVector2 airportH = airports.getAirportH();
 		AirportsWeather weathers = new AirportsWeather();
 		airportsWeather = weathers.updateAirportsWeather();
-		System.out.println("Weather at airport A: " + airportsWeather.get(airportA));
 
 		Timer swingtimer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				synchronized (MapAgent.this) {
-//					System.out.println("Plane: " + plane);
 					Container pane = frame.getContentPane();
 					// uncomment 2 next line, then comment the 3rd next line, then go to line 165
 					BufferedImage img = new BufferedImage(pane.getWidth(), pane.getHeight(),
@@ -130,8 +128,6 @@ public class MapAgent implements IMapService {
 					// Graphics2D g = (Graphics2D) frame.getContentPane().getGraphics();
 
 					// grid
-//					g.setColor(Color.pink);
-//					g.fillRect(0, 0, pane.getWidth(), (pane.getHeight() - 100));
 					Image bg = Toolkit.getDefaultToolkit().getImage("map.jpg");
 					g.drawImage(bg, 0, 0, pane.getWidth(), (pane.getHeight() - 100), null);
 
@@ -154,6 +150,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
+
 					String cap1 = airportsWeather.get(airportA);
 					g.drawString(cap1, (int) x1, (int) (y1 + 70));
 
@@ -338,11 +335,13 @@ public class MapAgent implements IMapService {
 
 			public IFuture<Void> execute(IInternalAccess ia) {
 				synchronized (MapAgent.this) {
-					// test
 					long currentTimestamp = System.currentTimeMillis();
-					System.out.println("Current time: " + currentTimestamp);
 					double deltaseconds = (currentTimestamp - timestamp) / 1000.0;
-					System.out.println("Time: " + deltaseconds);
+					counter += deltaseconds;
+					if (counter > 8) {
+						airportsWeather = weathers.updateAirportsWeather();
+						counter = 0;
+					}
 
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
@@ -354,12 +353,13 @@ public class MapAgent implements IMapService {
 										plane.loadParcel();
 									}
 									plane.updatePos(1);
-								} else {
-									if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
-										plane.getTargetArrived().setResult(null);
-										plane.setTargetArrived(null);
-										plane.unloadParcel();
-									}
+								}
+							}
+							if (plane.hasArrived()) {
+								if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
+									plane.getTargetArrived().setResult(null);
+									plane.setTargetArrived(null);
+									plane.unloadParcel();
 								}
 							}
 						}
@@ -410,6 +410,17 @@ public class MapAgent implements IMapService {
 			plane.setTargetArrived(ret);
 		}
 		return ret;
+	}
+
+	/** Returns an ImageIcon, or null if the path was invalid. */
+	protected ImageIcon createImageIcon(String path, String description) {
+		java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL, description);
+		} else {
+			System.err.println("Couldn't find file: " + path);
+			return null;
+		}
 	}
 
 }

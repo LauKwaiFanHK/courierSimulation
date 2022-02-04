@@ -136,7 +136,7 @@ public class Plane {
 	}
 
 	public void movePlane(IVector2 newUnitVector) {
-		this.setSpeed(0.01);
+		this.setSpeed(0.005);
 		System.out.println("Plane: " + this.getId() + " current Position: " + currentPosition);
 		System.out.println("Speed: " + this.getSpeed() + "\n----");
 		IVector2 positionDelta = newUnitVector.multiply(speed);
