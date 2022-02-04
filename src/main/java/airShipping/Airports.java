@@ -11,7 +11,7 @@ public class Airports {
 	private final IVector2 airportE = new Vector2Double(16.4, 17.5);
 	private final IVector2 airportF = new Vector2Double(20.9, 2.1);
 	private final IVector2 airportG = new Vector2Double(4.2, 14.7);
-	private final IVector2 airportH = new Vector2Double(28.9, 8.0);
+	private final IVector2 airportH = new Vector2Double(22.5, 8.0);
 
 	public IVector2 getAirportA() {
 		return airportA;

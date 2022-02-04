@@ -27,9 +27,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
@@ -66,6 +68,8 @@ public class MapAgent implements IMapService {
 	private IComponentStep<Void> simulationstep;
 
 	private Airports airports = new Airports();
+
+	private long timestamp;
 
 	@OnInit
 	public IFuture<Void> agentInit() {
@@ -121,19 +125,21 @@ public class MapAgent implements IMapService {
 					// Graphics2D g = (Graphics2D) frame.getContentPane().getGraphics();
 
 					// grid
-					g.setColor(Color.pink);
-					g.fillRect(0, 0, pane.getWidth(), (pane.getHeight() - 100));
+//					g.setColor(Color.pink);
+//					g.fillRect(0, 0, pane.getWidth(), (pane.getHeight() - 100));
+					Image bg = Toolkit.getDefaultToolkit().getImage("map.jpg");
+					g.drawImage(bg, 0, 0, pane.getWidth(), (pane.getHeight() - 100), null);
 
 					// departAirport (Airport A)
-					double w1 = 75;
-					double h1 = 50;
-					double x1 = 1.7 * 30;
+					double w1 = 84;
+					double h1 = 51;
+					double x1 = 1.7 * pane.getWidth() * 0.04;
 					x1 = x1 - (w1 / 2);
-					double y1 = 7.9 * 30;
+					double y1 = 7.9 * pane.getHeight() * 0.04;
 					y1 = y1 - (h1 / 2);
-					Rectangle2D dAirportRec = new Rectangle2D.Double(x1, y1, w1, h1);
-					g.setColor(Color.darkGray);
-					g.fill(dAirportRec);
+					Image airp1 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
+					g.drawImage(airp1, (int) x1, (int) y1, (int) w1, (int) h1, null);
+
 					// Depart airport text
 					Font f1 = new Font("Arial", Font.PLAIN, 12);
 					g.setColor(Color.black);
@@ -147,15 +153,15 @@ public class MapAgent implements IMapService {
 					g.drawString(cap1, (int) x1, (int) (y1 + 70));
 
 					// arrivalAirport (Airport B)
-					double w2 = 75;
-					double h2 = 50;
-					double x2 = airportB.getXAsDouble() * 30;
+					double w2 = 84;
+					double h2 = 51;
+					double x2 = airportB.getXAsDouble() * pane.getWidth() * 0.04;
 					x2 = x2 - (w2 / 2);
-					double y2 = airportB.getYAsDouble() * 30;
+					double y2 = airportB.getYAsDouble() * pane.getHeight() * 0.04;
 					y2 = y2 - (h2 / 2);
-					Rectangle2D planeRecc = new Rectangle2D.Double(x2, y2, w2, h2);
-					g.setColor(Color.yellow);
-					g.fill(planeRecc);
+					Image airp2 = Toolkit.getDefaultToolkit().getImage("Airport2.png");
+					g.drawImage(airp2, (int) x2, (int) y2, (int) w2, (int) h2, null);
+
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -168,15 +174,15 @@ public class MapAgent implements IMapService {
 					g.drawString(cap2, (int) x2, (int) (y2 + 70));
 
 					// arrivalAirport (Airport C)
-					double w3 = 75;
-					double h3 = 50;
-					double x3 = airportC.getXAsDouble() * 30;
+					double w3 = 84;
+					double h3 = 51;
+					double x3 = airportC.getXAsDouble() * pane.getWidth() * 0.04;
 					x3 = x3 - (w3 / 2);
-					double y3 = airportC.getYAsDouble() * 30;
+					double y3 = airportC.getYAsDouble() * pane.getHeight() * 0.04;
 					y3 = y3 - (h2 / 2);
-					Rectangle2D airportCRecc = new Rectangle2D.Double(x3, y3, w3, h3);
-					g.setColor(Color.blue);
-					g.fill(airportCRecc);
+					Image airp3 = Toolkit.getDefaultToolkit().getImage("Airport3.png");
+					g.drawImage(airp3, (int) x3, (int) y3, (int) w3, (int) h3, null);
+
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -189,15 +195,15 @@ public class MapAgent implements IMapService {
 					g.drawString(cap3, (int) x3, (int) (y3 + 70));
 
 					// arrivalAirport (Airport D)
-					double w4 = 75;
-					double h4 = 50;
-					double x4 = airportD.getXAsDouble() * 30;
+					double w4 = 84;
+					double h4 = 51;
+					double x4 = airportD.getXAsDouble() * pane.getWidth() * 0.04;
 					x4 = x4 - (w4 / 2);
-					double y4 = airportD.getYAsDouble() * 30;
+					double y4 = airportD.getYAsDouble() * pane.getHeight() * 0.04;
 					y4 = y4 - (h2 / 2);
-					Rectangle2D airportDRecc = new Rectangle2D.Double(x4, y4, w4, h4);
-					g.setColor(Color.green);
-					g.fill(airportDRecc);
+					Image airp4 = Toolkit.getDefaultToolkit().getImage("Airport4.png");
+					g.drawImage(airp4, (int) x4, (int) y4, (int) w4, (int) h4, null);
+
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -212,13 +218,12 @@ public class MapAgent implements IMapService {
 					// departAirport (Airport E)
 					double w5 = 75;
 					double h5 = 50;
-					double x5 = airportE.getXAsDouble() * 30;
+					double x5 = airportE.getXAsDouble() * pane.getWidth() * 0.04;
 					x5 = x5 - (w5 / 2);
-					double y5 = airportE.getYAsDouble() * 30;
+					double y5 = airportE.getYAsDouble() * pane.getHeight() * 0.04;
 					y5 = y5 - (h5 / 2);
-					Rectangle2D eAirportRec = new Rectangle2D.Double(x5, y5, w5, h5);
-					g.setColor(Color.darkGray);
-					g.fill(eAirportRec);
+					Image airp5 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
+					g.drawImage(airp5, (int) x5, (int) y5, (int) w5, (int) h5, null);
 					// Depart airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -233,13 +238,12 @@ public class MapAgent implements IMapService {
 					// arrivalAirport (Airport F)
 					double w6 = 75;
 					double h6 = 50;
-					double x6 = airportF.getXAsDouble() * 30;
+					double x6 = airportF.getXAsDouble() * pane.getWidth() * 0.04;
 					x6 = x6 - (w6 / 2);
-					double y6 = airportF.getYAsDouble() * 30;
+					double y6 = airportF.getYAsDouble() * pane.getHeight() * 0.04;
 					y6 = y6 - (h6 / 2);
-					Rectangle2D planeRecF = new Rectangle2D.Double(x6, y6, w6, h6);
-					g.setColor(Color.yellow);
-					g.fill(planeRecF);
+					Image airp6 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
+					g.drawImage(airp6, (int) x6, (int) y6, (int) w6, (int) h6, null);
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -254,13 +258,12 @@ public class MapAgent implements IMapService {
 					// arrivalAirport (Airport G)
 					double w7 = 75;
 					double h7 = 50;
-					double x7 = airportG.getXAsDouble() * 30;
-					x7 = x7 - (w3 / 2);
-					double y7 = airportG.getYAsDouble() * 30;
-					y3 = y3 - (h2 / 2);
-					Rectangle2D airportGRecc = new Rectangle2D.Double(x7, y7, w7, h7);
-					g.setColor(Color.blue);
-					g.fill(airportGRecc);
+					double x7 = airportG.getXAsDouble() * pane.getWidth() * 0.04;
+					x7 = x7 - (w7 / 2);
+					double y7 = airportG.getYAsDouble() * pane.getHeight() * 0.04;
+					y7 = y7 - (h7 / 2);
+					Image airp7 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
+					g.drawImage(airp7, (int) x7, (int) y7, (int) w7, (int) h7, null);
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -275,13 +278,12 @@ public class MapAgent implements IMapService {
 					// arrivalAirport (Airport H)
 					double w8 = 75;
 					double h8 = 50;
-					double x8 = airportH.getXAsDouble() * 30;
+					double x8 = airportH.getXAsDouble() * pane.getWidth() * 0.04;
 					x8 = x8 - (w8 / 2);
-					double y8 = airportH.getYAsDouble() * 30;
+					double y8 = airportH.getYAsDouble() * pane.getHeight() * 0.04;
 					y8 = y8 - (h8 / 2);
-					Rectangle2D airportHRecc = new Rectangle2D.Double(x8, y8, w8, h8);
-					g.setColor(Color.green);
-					g.fill(airportHRecc);
+					Image airp8 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
+					g.drawImage(airp8, (int) x8, (int) y8, (int) w8, (int) h8, null);
 					// Arrival airport text
 					g.setColor(Color.black);
 					g.setFont(f1);
@@ -296,17 +298,16 @@ public class MapAgent implements IMapService {
 					// Plane
 					if (plane != null /* && plane2 != null */) {
 						for (Plane plane : planeList.values()) {
-							double w = 15;
-							double h = 15;
-							double x = plane.getCurrentPosition().getXAsDouble() * 30;
+							double w = 73;
+							double h = 23;
+							double x = plane.getCurrentPosition().getXAsDouble() * pane.getWidth() * 0.04;
 							x = x - (w / 2);
-							double y = plane.getCurrentPosition().getYAsDouble() * 30;
+							double y = plane.getCurrentPosition().getYAsDouble() * pane.getHeight() * 0.04;
 							y = y - (h / 2);
 							// double x = 13.8 -(w/2);
 							// double y = 2.5 - (h/2);
-							Ellipse2D planeRec = new Ellipse2D.Double(x, y, w, h);
-							g.setColor(Color.red);
-							g.fill(planeRec);
+							Image airplane = Toolkit.getDefaultToolkit().getImage("plane.png");
+							g.drawImage(airplane, (int) x, (int) y, (int) w, (int) h, null);
 							// capacity text
 							g.setColor(Color.black);
 							g.setFont(f1);
@@ -332,6 +333,11 @@ public class MapAgent implements IMapService {
 
 			public IFuture<Void> execute(IInternalAccess ia) {
 				synchronized (MapAgent.this) {
+					// test
+					long currentTimestamp = System.currentTimeMillis();
+					double deltaseconds = (currentTimestamp - timestamp) / 1000.0;
+					System.out.println("Time: " + deltaseconds);
+
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
 							if (!plane.hasArrived()) {
@@ -348,6 +354,7 @@ public class MapAgent implements IMapService {
 							}
 						}
 					}
+					timestamp = currentTimestamp;
 					ia.scheduleStep(simulationstep);
 				}
 				return IFuture.DONE;
