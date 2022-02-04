@@ -61,7 +61,6 @@ public class MapAgent implements IMapService {
 	static JFrame frame;
 	static JPanel panel;
 	private Plane plane;
-	private Plane plane2;
 	private Map<String, Plane> planeList = new HashMap<>();
 	private Map<String, JProgressBar> barList = new HashMap<>();
 
@@ -69,7 +68,10 @@ public class MapAgent implements IMapService {
 
 	private Airports airports = new Airports();
 
+	HashMap<IVector2, String> airportsWeather = new HashMap<>();
+
 	private long timestamp;
+	private double counter;
 
 	@OnInit
 	public IFuture<Void> agentInit() {
@@ -112,6 +114,9 @@ public class MapAgent implements IMapService {
 		IVector2 airportF = airports.getAirportF();
 		IVector2 airportG = airports.getAirportG();
 		IVector2 airportH = airports.getAirportH();
+		AirportsWeather weathers = new AirportsWeather();
+		airportsWeather = weathers.updateAirportsWeather();
+		System.out.println("Weather at airport A: " + airportsWeather.get(airportA));
 
 		Timer swingtimer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -149,7 +154,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap1 = "This is: " + (s);
+					String cap1 = airportsWeather.get(airportA);
 					g.drawString(cap1, (int) x1, (int) (y1 + 70));
 
 					// arrivalAirport (Airport B)
@@ -170,7 +175,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap2 = "This is: " + (s2);
+					String cap2 = airportsWeather.get(airportB);
 					g.drawString(cap2, (int) x2, (int) (y2 + 70));
 
 					// arrivalAirport (Airport C)
@@ -191,7 +196,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap3 = "This is: " + (s3);
+					String cap3 = airportsWeather.get(airportC);
 					g.drawString(cap3, (int) x3, (int) (y3 + 70));
 
 					// arrivalAirport (Airport D)
@@ -212,7 +217,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap4 = "This is: " + (s4);
+					String cap4 = airportsWeather.get(airportD);
 					g.drawString(cap4, (int) x4, (int) (y4 + 70));
 
 					// departAirport (Airport E)
@@ -232,7 +237,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap5 = "This is: " + (s5);
+					String cap5 = airportsWeather.get(airportE);
 					g.drawString(cap5, (int) x5, (int) (y5 + 70));
 
 					// arrivalAirport (Airport F)
@@ -252,7 +257,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap6 = "This is: " + (s6);
+					String cap6 = airportsWeather.get(airportF);
 					g.drawString(cap6, (int) x6, (int) (y6 + 70));
 
 					// arrivalAirport (Airport G)
@@ -272,7 +277,7 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap7 = "This is: " + (s7);
+					String cap7 = airportsWeather.get(airportG);
 					g.drawString(cap7, (int) x7, (int) (y7 + 70));
 
 					// arrivalAirport (Airport H)
@@ -292,11 +297,11 @@ public class MapAgent implements IMapService {
 					// capacity text
 					g.setColor(Color.black);
 					g.setFont(f1);
-					String cap8 = "This is: " + (s8);
+					String cap8 = airportsWeather.get(airportH);
 					g.drawString(cap8, (int) x8, (int) (y8 + 70));
 
 					// Plane
-					if (plane != null /* && plane2 != null */) {
+					if (plane != null) {
 						for (Plane plane : planeList.values()) {
 							double w = 73;
 							double h = 23;
@@ -335,21 +340,26 @@ public class MapAgent implements IMapService {
 				synchronized (MapAgent.this) {
 					// test
 					long currentTimestamp = System.currentTimeMillis();
+					System.out.println("Current time: " + currentTimestamp);
 					double deltaseconds = (currentTimestamp - timestamp) / 1000.0;
 					System.out.println("Time: " + deltaseconds);
 
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
-							if (!plane.hasArrived()) {
-								if (plane.getNumberOfParcelsLoaded() == 0) {
-									plane.loadParcel();
-								}
-								plane.updatePos(1);
-							} else {
-								if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
-									plane.getTargetArrived().setResult(null);
-									plane.setTargetArrived(null);
-									plane.unloadParcel();
+							IVector2 destination = plane.getTarget();
+							String destinationWeather = airportsWeather.get(destination);
+							if (!(destinationWeather == "storm")) {
+								if (!plane.hasArrived()) {
+									if (plane.getNumberOfParcelsLoaded() == 0) {
+										plane.loadParcel();
+									}
+									plane.updatePos(1);
+								} else {
+									if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
+										plane.getTargetArrived().setResult(null);
+										plane.setTargetArrived(null);
+										plane.unloadParcel();
+									}
 								}
 							}
 						}
@@ -361,13 +371,13 @@ public class MapAgent implements IMapService {
 			}
 
 		};
+		timestamp = System.currentTimeMillis();
 		agent.scheduleStep(simulationstep);
 
 		return new Future<Void>();
 
 	}
 
-	// test
 	public IFuture<Void> createPlane2(String id, IVector2 startPosition, int capacity) {
 
 		synchronized (this) {

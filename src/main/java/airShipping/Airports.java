@@ -7,7 +7,7 @@ public class Airports {
 	private final IVector2 airportA = new Vector2Double(1.7, 7.9);
 	private final IVector2 airportB = new Vector2Double(13.8, 2.5);
 	private final IVector2 airportC = new Vector2Double(8.2, 11.7);
-	private final IVector2 airportD = new Vector2Double(4.9, 1.1);
+	private final IVector2 airportD = new Vector2Double(4.9, 3.1);
 	private final IVector2 airportE = new Vector2Double(16.4, 17.5);
 	private final IVector2 airportF = new Vector2Double(20.9, 2.1);
 	private final IVector2 airportG = new Vector2Double(4.2, 14.7);
