@@ -346,9 +346,9 @@ public class MapAgent implements IMapService {
 
 					if (plane != null) {
 						for (Plane plane : planeList.values()) {
-							IVector2 destination = plane.getTarget();
-							String destinationWeather = airportsWeather.get(destination);
-							if (!(destinationWeather == "storm")) {
+							IVector2 startPos = plane.getCurrentPosition();
+							String startAirportWeather = airportsWeather.get(startPos);
+							if (!(startAirportWeather == "storm")) {
 								if (!plane.hasArrived()) {
 									if (plane.getNumberOfParcelsLoaded() == 0) {
 										plane.loadParcel();
