@@ -11,6 +11,9 @@ import jadex.commons.future.Future;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.micro.annotation.AgentArgument;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Plane {
 
@@ -133,7 +136,7 @@ public class Plane {
 	}
 
 	public void movePlane(IVector2 newUnitVector) {
-		this.setSpeed(0.005);
+		this.setSpeed(0.01);
 		System.out.println("Plane: " + this.getId() + " current Position: " + currentPosition);
 		System.out.println("Speed: " + this.getSpeed() + "\n----");
 		IVector2 positionDelta = newUnitVector.multiply(speed);

@@ -42,8 +42,6 @@ public class PlaneAgent implements IPlaneService {
 
 		mapService = agent.getLocalService(query);
 
-//		IFuture<Void> done = mapService.createPlane("ABC", airports.getAirportB(), "XYZ", airports.getAirportB());
-
 		IFuture<Void> done = mapService.createPlane2(planeID, planeStartPosition, capacity);
 
 		System.out.println("Plane Agent found: " + mapService);
@@ -51,7 +49,7 @@ public class PlaneAgent implements IPlaneService {
 		return done;
 	}
 
-	// Good news, only one @OnStart method allowed in a package :)
+	// only one @OnStart method allowed in a package
 	@OnStart
 	public IFuture<Void> agentStart() {
 
@@ -60,7 +58,7 @@ public class PlaneAgent implements IPlaneService {
 
 			public void resultAvailable(Void done) {
 				i = (i + 1) % route.size();
-				IFuture<Void> arrived = mapService.setPlaneTarget(/* "ABC" */ planeID, route.get(i));
+				IFuture<Void> arrived = mapService.setPlaneTarget(planeID, route.get(i));
 				arrived.addResultListener(this);
 				System.out.println("Plane has arrived at " + route.get(i - 1));
 			}
@@ -69,33 +67,10 @@ public class PlaneAgent implements IPlaneService {
 			}
 		};
 
-		// test
-//		IResultListener<Void> rl2 = new IResultListener<Void>() {
-//			int i = 0;
-//
-//			public void resultAvailable(Void done) {
-//				i = (i + 1) % expressRoute.size();
-//				IFuture<Void> arrived = mapService.setPlaneTarget("XYZ", expressRoute.get(i));
-//				arrived.addResultListener(this);
-//				System.out.println("Plane has arrived at " + expressRoute.get(i - 1));
-//			}
-//
-//			public void exceptionOccurred(Exception e) {
-//			}
-//		};
-
-		IFuture<Void> arrived = mapService.setPlaneTarget(/* "ABC" */planeID, route.get(0));
+		IFuture<Void> arrived = mapService.setPlaneTarget(planeID, route.get(0));
 		arrived.addResultListener(rl);
-
-		// test
-//		IFuture<Void> arrived2 = mapService.setPlaneTarget("XYZ", expressRoute.get(0));
-//		arrived2.addResultListener(rl2);
 
 		return new Future<Void>();
 	}
 
-	public IFuture<Void> setPlaneID(String planeID) {
-//		this.planeID = planeID;
-		return IFuture.DONE;
-	};
 }

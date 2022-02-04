@@ -367,50 +367,6 @@ public class MapAgent implements IMapService {
 
 	}
 
-//	public void fill(int capacity, JProgressBar bar) {
-//		int parcelLoaded = 0;
-//		int parcelLoadedRate = (int) parcelLoaded / capacity;
-//		while (parcelLoadedRate <= 100) {
-//			bar.setValue(parcelLoadedRate);
-//			try {
-//				Thread.sleep(500); // simulate progress bar increases over time
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			parcelLoadedRate += 1; // count backwards, use -=1
-//		}
-//		bar.setString("Plane is fully loaded!");
-//	}
-
-//	public IFuture<Void> createPlane(String id, IVector2 startPosition, String id2, IVector2 startPosition2) {
-//
-//		synchronized (this) {
-//			plane = new Plane(id, startPosition);
-//			System.out.println("A plane is created: " + id);
-//			plane.loadParcel();
-//
-//			plane2 = new Plane(id2, startPosition2);
-//			System.out.println("A second plane is created: " + id2);
-//			plane2.loadParcel();
-//
-//			planeList.put(id, plane);
-//			planeList.put(id2, plane2);
-//
-//			for (Plane plane : planeList.values()) {
-//				JLabel text_plane = new JLabel();
-//				JProgressBar bar_plane = new JProgressBar();
-//				panel.add(text_plane);
-//				panel.add(bar_plane);
-//				text_plane.setText(plane.getId() + "'s current occupacy: ");
-//				bar_plane.setValue(plane.getOccupacyRate());
-//				bar_plane.setStringPainted(true);
-//				barList.put(plane.getId(), bar_plane);
-//			}
-//		}
-//
-//		return IFuture.DONE;
-//	};
-
 	// test
 	public IFuture<Void> createPlane2(String id, IVector2 startPosition, int capacity) {
 
