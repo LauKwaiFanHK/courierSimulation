@@ -1,6 +1,7 @@
 package airShipping;
 
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
@@ -55,7 +57,7 @@ import jadex.micro.annotation.AgentArgument;
 @Agent(autoprovide = Boolean3.TRUE)
 @Service
 public class MapAgent implements IMapService {
-	//
+
 	@Agent
 	private IInternalAccess agent;
 
@@ -68,6 +70,8 @@ public class MapAgent implements IMapService {
 	private Map<String, Plane> planeList = new HashMap<>();
 
 	private Map<String, JProgressBar> barList = new HashMap<>();
+
+	private Map<String, JLabel> profitList = new HashMap<>();
 
 	private IComponentStep<Void> simulationstep;
 
@@ -93,7 +97,7 @@ public class MapAgent implements IMapService {
 			pane.setLayout(null);
 			panel = new JPanel();
 			pane.add(panel);
-			panel.setBounds(0, 610, 1000, 110);
+			panel.setBounds(0, 610, 1000, 150);
 			panel.setBackground(Color.gray);
 
 			agent.getExternalAccess().scheduleStep(new IComponentStep<Void>() {
@@ -321,6 +325,15 @@ public class MapAgent implements IMapService {
 							if (bar != null) {
 								bar.setValue(plane.getOccupacyRate());
 							}
+
+							JLabel label = profitList.get(plane.getId());
+							if (label != null) {
+								double accumulatedProfit = plane.getAccumulatedProfit();
+								DecimalFormat df = new DecimalFormat("#.#");
+								String str_aProfit = df.format(accumulatedProfit);
+								str_aProfit = str_aProfit + " €";
+								label.setText(str_aProfit);
+							}
 						}
 					}
 
@@ -329,6 +342,7 @@ public class MapAgent implements IMapService {
 					gScreen.drawImage(img, 0, 0, null);
 				}
 			}
+
 		});
 		swingtimer.start();
 
@@ -360,6 +374,8 @@ public class MapAgent implements IMapService {
 									plane.getTargetArrived().setResult(null);
 									plane.setTargetArrived(null);
 									plane.unloadParcel();
+									plane.calculateAccumulatedProfit();
+									plane.setStartAirport(plane.getCurrentPosition().copy());
 								}
 							}
 						}
@@ -389,14 +405,27 @@ public class MapAgent implements IMapService {
 
 			planeList.put(id, plane);
 
-			JLabel text_plane = new JLabel();
-			JProgressBar bar_plane = new JProgressBar();
-			panel.add(text_plane);
-			panel.add(bar_plane);
-			text_plane.setText(plane.getId() + "'s current occupacy: ");
-			bar_plane.setValue(plane.getOccupacyRate());
-			bar_plane.setStringPainted(true);
-			barList.put(plane.getId(), bar_plane);
+			JLabel plane_occupacy_text = new JLabel();
+			JLabel plane_accumulated_profit_text = new JLabel();
+			JProgressBar plane_bar = new JProgressBar();
+			JLabel plane_profit = new JLabel();
+
+			plane_occupacy_text.setPreferredSize(new Dimension(280, 20));
+			plane_accumulated_profit_text.setPreferredSize(new Dimension(160, 20));
+			plane_profit.setPreferredSize(new Dimension(150, 20));
+			plane_bar.setPreferredSize(new Dimension(250, 20));
+			panel.add(plane_occupacy_text);
+			panel.add(plane_bar);
+			panel.add(plane_accumulated_profit_text);
+			panel.add(plane_profit);
+
+			plane_occupacy_text.setText(plane.getId() + " -  Current occupacy: ");
+			plane_bar.setValue(plane.getOccupacyRate());
+			plane_bar.setStringPainted(true);
+			barList.put(plane.getId(), plane_bar);
+			plane_accumulated_profit_text.setText("   Accumulated profit: ");
+			profitList.put(plane.getId(), plane_profit);
+
 		}
 
 		return IFuture.DONE;

@@ -55,7 +55,7 @@ public class Main {
 		// plane agent for ABC
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "ABC");
+		ci.addArgument("planeID", "Jet-001 (Express)");
 		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", expressRoute);
 		ci.addArgument("capacity", 100);
@@ -64,7 +64,7 @@ public class Main {
 		// plane agent for XYZ
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "XYZ");
+		ci.addArgument("planeID", "Airbus-A380-001");
 		ci.addArgument("planeStartPosition", airports.getAirportB());
 		ci.addArgument("route", normalRoute);
 		ci.addArgument("capacity", 5000);
@@ -73,7 +73,7 @@ public class Main {
 		// plane agent for LMN
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "LMN");
+		ci.addArgument("planeID", "Airbus-A380-002");
 		ci.addArgument("planeStartPosition", airports.getAirportE());
 		ci.addArgument("route", normalRoute2);
 		ci.addArgument("capacity", 5000);
@@ -82,7 +82,7 @@ public class Main {
 		// plane agent for OPQ
 		ci = new CreationInfo();
 		ci.setFilenameClass(PlaneAgent.class);
-		ci.addArgument("planeID", "OPQ");
+		ci.addArgument("planeID", "Jet-002 (Express)");
 		ci.addArgument("planeStartPosition", airports.getAirportE());
 		ci.addArgument("route", expressRoute2);
 		ci.addArgument("capacity", 100);
