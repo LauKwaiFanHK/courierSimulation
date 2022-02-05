@@ -60,9 +60,13 @@ public class MapAgent implements IMapService {
 	private IInternalAccess agent;
 
 	static JFrame frame;
+
 	static JPanel panel;
+
 	private Plane plane;
+
 	private Map<String, Plane> planeList = new HashMap<>();
+
 	private Map<String, JProgressBar> barList = new HashMap<>();
 
 	private IComponentStep<Void> simulationstep;
@@ -72,6 +76,7 @@ public class MapAgent implements IMapService {
 	HashMap<IVector2, Image> airportsWeather = new HashMap<>();
 
 	private long timestamp;
+
 	private double counter;
 
 	@OnInit
@@ -122,17 +127,17 @@ public class MapAgent implements IMapService {
 			public void actionPerformed(ActionEvent e) {
 				synchronized (MapAgent.this) {
 					Container pane = frame.getContentPane();
-					// uncomment 2 next line, then comment the 3rd next line, then go to line 165
+
 					BufferedImage img = new BufferedImage(pane.getWidth(), pane.getHeight(),
 							BufferedImage.TYPE_4BYTE_ABGR_PRE);
+
 					Graphics2D g = (Graphics2D) img.getGraphics();
-					// Graphics2D g = (Graphics2D) frame.getContentPane().getGraphics();
 
 					// grid
 					Image bg = Toolkit.getDefaultToolkit().getImage("map.jpg");
 					g.drawImage(bg, 0, 0, pane.getWidth(), (pane.getHeight() - 100), null);
 
-					// departAirport (Airport A)
+					// Airport A
 					double w1 = 84;
 					double h1 = 51;
 					double x1 = 1.7 * pane.getWidth() * 0.04;
@@ -142,20 +147,18 @@ public class MapAgent implements IMapService {
 					Image airp1 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
 					g.drawImage(airp1, (int) x1, (int) y1, (int) w1, (int) h1, null);
 
-					// Depart airport text
+					// Airport A text
 					Font f1 = new Font("Arial", Font.PLAIN, 12);
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s = "Airport A";
 					g.drawString(s, (int) x1, (int) (y1 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
 
+					// Airport A weather
 					Image airp1_weather = airportsWeather.get(airportA);
 					g.drawImage(airp1_weather, (int) (x1 + 20), (int) (y1 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport B)
+					// Airport B
 					double w2 = 84;
 					double h2 = 51;
 					double x2 = airportB.getXAsDouble() * pane.getWidth() * 0.04;
@@ -165,18 +168,17 @@ public class MapAgent implements IMapService {
 					Image airp2 = Toolkit.getDefaultToolkit().getImage("Airport2.png");
 					g.drawImage(airp2, (int) x2, (int) y2, (int) w2, (int) h2, null);
 
-					// Arrival airport text
+					// airport B text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s2 = "Airport B";
 					g.drawString(s2, (int) x2, (int) (y2 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport B weather
 					Image airp2_weather = airportsWeather.get(airportB);
 					g.drawImage(airp2_weather, (int) (x2 + 20), (int) (y2 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport C)
+					// airport C
 					double w3 = 84;
 					double h3 = 51;
 					double x3 = airportC.getXAsDouble() * pane.getWidth() * 0.04;
@@ -186,18 +188,17 @@ public class MapAgent implements IMapService {
 					Image airp3 = Toolkit.getDefaultToolkit().getImage("Airport3.png");
 					g.drawImage(airp3, (int) x3, (int) y3, (int) w3, (int) h3, null);
 
-					// Arrival airport text
+					// airport C text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s3 = "Airport C";
 					g.drawString(s3, (int) x3, (int) (y3 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport C weather
 					Image cap3_weather = airportsWeather.get(airportC);
 					g.drawImage(cap3_weather, (int) (x3 + 20), (int) (y3 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport D)
+					// airport D
 					double w4 = 84;
 					double h4 = 51;
 					double x4 = airportD.getXAsDouble() * pane.getWidth() * 0.04;
@@ -207,18 +208,17 @@ public class MapAgent implements IMapService {
 					Image airp4 = Toolkit.getDefaultToolkit().getImage("Airport4.png");
 					g.drawImage(airp4, (int) x4, (int) y4, (int) w4, (int) h4, null);
 
-					// Arrival airport text
+					// airport D text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s4 = "Airport D";
 					g.drawString(s4, (int) x4, (int) (y4 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport D weather
 					Image cap4_weather = airportsWeather.get(airportD);
 					g.drawImage(cap4_weather, (int) (x4 + 20), (int) (y4 + 50), 50, 50, null);
 
-					// departAirport (Airport E)
+					// airport E
 					double w5 = 75;
 					double h5 = 50;
 					double x5 = airportE.getXAsDouble() * pane.getWidth() * 0.04;
@@ -227,18 +227,18 @@ public class MapAgent implements IMapService {
 					y5 = y5 - (h5 / 2);
 					Image airp5 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
 					g.drawImage(airp5, (int) x5, (int) y5, (int) w5, (int) h5, null);
-					// Depart airport text
+
+					// airport E text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s5 = "Airport E";
 					g.drawString(s5, (int) x5, (int) (y5 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport E weather
 					Image cap5_weather = airportsWeather.get(airportE);
 					g.drawImage(cap5_weather, (int) (x5 + 20), (int) (y5 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport F)
+					// airport F
 					double w6 = 75;
 					double h6 = 50;
 					double x6 = airportF.getXAsDouble() * pane.getWidth() * 0.04;
@@ -247,18 +247,18 @@ public class MapAgent implements IMapService {
 					y6 = y6 - (h6 / 2);
 					Image airp6 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
 					g.drawImage(airp6, (int) x6, (int) y6, (int) w6, (int) h6, null);
-					// Arrival airport text
+
+					// airport F text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s6 = "Airport F";
 					g.drawString(s6, (int) x6, (int) (y6 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport F weather
 					Image cap6_weather = airportsWeather.get(airportF);
 					g.drawImage(cap6_weather, (int) (x6 + 20), (int) (y6 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport G)
+					// Airport G
 					double w7 = 75;
 					double h7 = 50;
 					double x7 = airportG.getXAsDouble() * pane.getWidth() * 0.04;
@@ -267,18 +267,18 @@ public class MapAgent implements IMapService {
 					y7 = y7 - (h7 / 2);
 					Image airp7 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
 					g.drawImage(airp7, (int) x7, (int) y7, (int) w7, (int) h7, null);
-					// Arrival airport text
+
+					// airport G text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s7 = "Airport G";
 					g.drawString(s7, (int) x7, (int) (y7 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+
+					// airport G weather
 					Image cap7_weather = airportsWeather.get(airportG);
 					g.drawImage(cap7_weather, (int) (x7 + 20), (int) (y7 + 50), 50, 50, null);
 
-					// arrivalAirport (Airport H)
+					// airport H
 					double w8 = 75;
 					double h8 = 50;
 					double x8 = airportH.getXAsDouble() * pane.getWidth() * 0.04;
@@ -287,14 +287,14 @@ public class MapAgent implements IMapService {
 					y8 = y8 - (h8 / 2);
 					Image airp8 = Toolkit.getDefaultToolkit().getImage("Airport1.png");
 					g.drawImage(airp8, (int) x8, (int) y8, (int) w8, (int) h8, null);
-					// Arrival airport text
+
+					// airport H text
 					g.setColor(Color.black);
 					g.setFont(f1);
 					String s8 = "Airport H";
-					g.drawString(s4, (int) x4, (int) (y4 - 10));
-					// capacity text
-					g.setColor(Color.black);
-					g.setFont(f1);
+					g.drawString(s8, (int) x8, (int) (y8 - 10));
+
+					// airport H weather
 					Image cap8_weather = airportsWeather.get(airportH);
 					g.drawImage(cap8_weather, (int) (x8 + 20), (int) (y8 + 50), 50, 50, null);
 
@@ -307,14 +307,14 @@ public class MapAgent implements IMapService {
 							x = x - (w / 2);
 							double y = plane.getCurrentPosition().getYAsDouble() * pane.getHeight() * 0.04;
 							y = y - (h / 2);
-							// double x = 13.8 -(w/2);
-							// double y = 2.5 - (h/2);
+
 							Image airplane = Toolkit.getDefaultToolkit().getImage("plane.png");
 							g.drawImage(airplane, (int) x, (int) y, (int) w, (int) h, null);
-							// capacity text
+
+							// plane text, shows number of parcels in plane
 							g.setColor(Color.black);
 							g.setFont(f1);
-							String capPlane = plane.getNumberOfParcelsLoaded() + " parcels in plane";
+							String capPlane = plane.getNumberOfParcelsLoaded() + " parcels in plane: " + plane.getId();
 							g.drawString(capPlane, (int) x, (int) (y + 70));
 
 							JProgressBar bar = barList.get(plane.getId());
@@ -339,6 +339,7 @@ public class MapAgent implements IMapService {
 					long currentTimestamp = System.currentTimeMillis();
 					double deltaseconds = (currentTimestamp - timestamp) / 1000.0;
 					counter += deltaseconds;
+
 					if (counter > 8) {
 						airportsWeather = weathers.updateAirportsWeather();
 						counter = 0;
@@ -348,13 +349,11 @@ public class MapAgent implements IMapService {
 						for (Plane plane : planeList.values()) {
 							IVector2 startPos = plane.getCurrentPosition();
 							Image startAirportWeather = airportsWeather.get(startPos);
-							if (!(startAirportWeather == weathers.getWeather().get(5))) {
-								if (!plane.hasArrived()) {
-									if (plane.getNumberOfParcelsLoaded() == 0) {
-										plane.loadParcel();
-									}
-									plane.updatePos(1);
+							if (!(startAirportWeather == weathers.getWeather().get(5)) && (!plane.hasArrived())) {
+								if (plane.getNumberOfParcelsLoaded() == 0) {
+									plane.loadParcel();
 								}
+								plane.updatePos(1);
 							}
 							if (plane.hasArrived()) {
 								if (plane.getTargetArrived() != null && !plane.getTargetArrived().isDone()) {
@@ -379,7 +378,7 @@ public class MapAgent implements IMapService {
 
 	}
 
-	public IFuture<Void> createPlane2(String id, IVector2 startPosition, int capacity) {
+	public IFuture<Void> createPlane(String id, IVector2 startPosition, int capacity) {
 
 		synchronized (this) {
 

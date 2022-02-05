@@ -19,7 +19,7 @@ import jadex.commons.Boolean3;
 
 @Agent(autoprovide = Boolean3.TRUE)
 @Service
-public class PlaneAgent implements IPlaneService {
+public class PlaneAgent {
 	@Agent
 	private IInternalAccess agent;
 
@@ -42,14 +42,14 @@ public class PlaneAgent implements IPlaneService {
 
 		mapService = agent.getLocalService(query);
 
-		IFuture<Void> done = mapService.createPlane2(planeID, planeStartPosition, capacity);
+		IFuture<Void> done = mapService.createPlane(planeID, planeStartPosition, capacity);
 
 		System.out.println("Plane Agent found: " + mapService);
 
 		return done;
 	}
 
-	// only one @OnStart method allowed in a package
+	// only one @OnStart method allowed in an agent
 	@OnStart
 	public IFuture<Void> agentStart() {
 
