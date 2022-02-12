@@ -88,7 +88,7 @@ public class MapAgent implements IMapService {
 		Future<Void> done = new Future<Void>();
 
 		SwingUtilities.invokeLater(() -> {
-			frame = new JFrame("Environment Simulation v1.0");
+			frame = new JFrame("Courier Simulation v1.0");
 			frame.setSize(1000, 1000);
 			frame.setVisible(true);
 			System.out.println("Frame's layout: " + frame.getLayout());

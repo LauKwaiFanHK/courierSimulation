@@ -65,7 +65,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else /* if (fullyLoaded) */ {
+			} else {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -75,7 +75,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else /* if (fullyLoaded) */ {
+			} else {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -85,7 +85,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else /* if (fullyLoaded) */ {
+			} else {
 				this.movePlane(newUnitVector);
 				break;
 			}
@@ -95,7 +95,7 @@ public class Plane {
 					this.stopPlane();
 					break;
 				}
-			} else /* if (fullyLoaded) */ {
+			} else {
 				this.movePlane(newUnitVector);
 				break;
 			}

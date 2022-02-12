@@ -18,7 +18,6 @@ import jadex.micro.annotation.AgentArgument;
 import jadex.commons.Boolean3;
 
 @Agent(autoprovide = Boolean3.TRUE)
-@Service
 public class PlaneAgent {
 	@Agent
 	private IInternalAccess agent;
